@@ -256,13 +256,13 @@ resource "aws_route_table_association" "private_subnet_rt_association_2" {
 resource "aws_route" "private_subnet_1_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.private_route_table_1.id
-  gateway_id             = aws_internet_gateway.igw.id
+  gateway_id             = aws_nat_gateway.nat_gateway_1.id
 }
 
 resource "aws_route" "private_subnet_2_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.private_route_table_2.id
-  gateway_id             = aws_internet_gateway.igw.id
+  gateway_id             = aws_nat_gateway.nat_gateway_2.id
 
 }
 
