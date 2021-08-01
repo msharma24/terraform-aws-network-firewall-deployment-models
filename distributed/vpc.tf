@@ -267,4 +267,50 @@ resource "aws_route" "private_subnet_2_route" {
 }
 
 
+#----------------------------------------------------------------------------
+# Ingress Route Table for return traffic
+#-----------------------------------------------------------------------------
+resource "aws_route_table" "ingress_route_table" {
+  vpc_id = aws_vpc.vpc.id
 
+  tags = {
+    Name = "ingress_route_table"
+  }
+
+}
+
+#-----------------------------------------------------------------------------
+# NAT  Gateway
+#-----------------------------------------------------------------------------
+resource "aws_eip" "nat_gateway_eip_1" {
+
+  tags = {
+    Name = "nat_gateway_eip_1"
+  }
+}
+
+resource "aws_eip" "nat_gateway_eip_2" {
+
+  tags = {
+    Name = "nat_gateway_eip_2"
+  }
+}
+
+resource "aws_nat_gateway" "nat_gateway_1" {
+  subnet_id     = aws_subnet.public_subnet_1.id
+  allocation_id = aws_eip.nat_gateway_eip_1.id
+
+  tags = {
+    Name = "nat_gateway_1"
+  }
+}
+
+
+resource "aws_nat_gateway" "nat_gateway_2" {
+  subnet_id     = aws_subnet.public_subnet_2.id
+  allocation_id = aws_eip.nat_gateway_eip_2.id
+
+  tags = {
+    Name = "nat_gateway_2"
+  }
+}

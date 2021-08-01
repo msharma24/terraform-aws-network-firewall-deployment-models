@@ -41,3 +41,14 @@ output "private_route_table_2" {
   value       = aws_route_table.private_route_table_2.id
 
 }
+
+output "nat_gateway_1_id" {
+  description = "NAT Gateway 1 ID"
+  value       = aws_nat_gateway.nat_gateway_1.id
+}
+
+
+output "nat_gateway_2_id" {
+  description = "NAT Gateway 2 ID"
+  value       = aws_nat_gateway.nat_gateway_2.id
+}
