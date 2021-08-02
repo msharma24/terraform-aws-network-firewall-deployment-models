@@ -173,13 +173,16 @@ resource "aws_route_table_association" "public_subnet_rt_association_2" {
 resource "aws_route" "public_subnet_1_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.public_route_table_1.id
-  gateway_id             = aws_internet_gateway.igw.id
+  #gateway_id             = aws_internet_gateway.igw.id
+  vpc_endpoint_id = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
 }
 
 resource "aws_route" "public_subnet_2_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.public_route_table_2.id
-  gateway_id             = aws_internet_gateway.igw.id
+  #  gateway_id             = aws_internet_gateway.igw.id
+  vpc_endpoint_id = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+
 
 }
 
