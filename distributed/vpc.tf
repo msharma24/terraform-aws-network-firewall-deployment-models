@@ -26,8 +26,9 @@ resource "aws_internet_gateway" "igw" {
 # Firewall Subnets
 #-----------------------------------------------------------------------------
 resource "aws_subnet" "firewall_subnet_1" {
-  cidr_block = "10.1.16.0/28"
-  vpc_id     = aws_vpc.vpc.id
+  cidr_block        = "10.1.16.0/28"
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = "ap-southeast-2a"
 
   tags = {
     Name = "firewall_subnet_1"
@@ -36,8 +37,9 @@ resource "aws_subnet" "firewall_subnet_1" {
 }
 
 resource "aws_subnet" "firewall_subnet_2" {
-  cidr_block = "10.1.16.16/28"
-  vpc_id     = aws_vpc.vpc.id
+  cidr_block        = "10.1.16.16/28"
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = "ap-southeast-2b"
 
   tags = {
     Name = "firewall_subnet_2"
@@ -100,7 +102,6 @@ resource "aws_route" "firewall_subnet_2_route" {
 
 }
 
-
 /*
  * Public Route Config
  */
@@ -109,8 +110,9 @@ resource "aws_route" "firewall_subnet_2_route" {
 # Firewall Subnets
 #-----------------------------------------------------------------------------
 resource "aws_subnet" "public_subnet_1" {
-  cidr_block = "10.1.1.0/24"
-  vpc_id     = aws_vpc.vpc.id
+  cidr_block        = "10.1.1.0/24"
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = "ap-southeast-2a"
 
   tags = {
     Name = "public_subnet_1"
@@ -119,8 +121,9 @@ resource "aws_subnet" "public_subnet_1" {
 }
 
 resource "aws_subnet" "public_subnet_2" {
-  cidr_block = "10.1.3.0/24"
-  vpc_id     = aws_vpc.vpc.id
+  cidr_block        = "10.1.3.0/24"
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = "ap-southeast-2b"
 
   tags = {
     Name = "public_subnet_2"
@@ -150,7 +153,6 @@ resource "aws_route_table" "public_route_table_2" {
   }
 
 }
-
 
 #-----------------------------------------------------------------------------
 # Subnet association
@@ -193,8 +195,9 @@ resource "aws_route" "public_subnet_2_route" {
 # Private Subnets
 #-----------------------------------------------------------------------------
 resource "aws_subnet" "private_subnet_1" {
-  cidr_block = "10.1.0.0/24"
-  vpc_id     = aws_vpc.vpc.id
+  cidr_block        = "10.1.0.0/24"
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = "ap-southeast-2a"
 
   tags = {
     Name = "private_subnet_1"
@@ -203,8 +206,9 @@ resource "aws_subnet" "private_subnet_1" {
 }
 
 resource "aws_subnet" "private_subnet_2" {
-  cidr_block = "10.1.2.0/24"
-  vpc_id     = aws_vpc.vpc.id
+  cidr_block        = "10.1.2.0/24"
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = "ap-southeast-2b"
 
   tags = {
     Name = "private_subnet_2"
@@ -267,7 +271,6 @@ resource "aws_route" "private_subnet_2_route" {
 
 }
 
-
 #----------------------------------------------------------------------------
 # Ingress Route Table for return traffic
 #-----------------------------------------------------------------------------
@@ -280,13 +283,26 @@ resource "aws_route_table" "ingress_route_table" {
 
 }
 
-# resource "aws_route" "ingress_route" {
-#   route_table_id = aws_route_table.ingress_route_table.id
-#   #   gateway_id             = aws_internet_gateway.igw.id
-#   destination_cidr_block = "10.1.1.0/24"
-#   #   vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
-#   #
-# }
+resource "aws_route_table_association" "igw_association" {
+  gateway_id     = aws_internet_gateway.igw.id
+  route_table_id = aws_route_table.ingress_route_table.id
+
+}
+
+resource "aws_route" "ingress_route_1" {
+  route_table_id         = aws_route_table.ingress_route_table.id
+  destination_cidr_block = "10.1.1.0/24"
+  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+
+}
+
+resource "aws_route" "ingress_route_2" {
+  route_table_id         = aws_route_table.ingress_route_table.id
+  destination_cidr_block = "10.1.3.0/24"
+  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+
+}
+
 
 #-----------------------------------------------------------------------------
 # NAT  Gateway
