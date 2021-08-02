@@ -262,12 +262,20 @@ resource "aws_route" "private_subnet_1_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.private_route_table_1.id
   gateway_id             = aws_nat_gateway.nat_gateway_1.id
+
+  depends_on = [
+    aws_nat_gateway.nat_gateway_1
+  ]
 }
 
 resource "aws_route" "private_subnet_2_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.private_route_table_2.id
   gateway_id             = aws_nat_gateway.nat_gateway_2.id
+
+  depends_on = [
+    aws_nat_gateway.nat_gateway_2
+  ]
 
 }
 
