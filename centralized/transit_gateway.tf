@@ -1,3 +1,7 @@
+#------------------------------------------------------------------------
+# Transit Gateway
+#------------------------------------------------------------------------
+
 resource "aws_ec2_transit_gateway" "tgw" {
   description     = "development-transit-gateway"
   amazon_side_asn = var.amazon_side_asn
@@ -19,7 +23,9 @@ resource "aws_ec2_transit_gateway" "tgw" {
 
 }
 
-
+#------------------------------------------------------------------------
+# Spoke VPA A - TGW Attachment
+#------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_a_tgw_attachment" {
   vpc_id                                          = module.spoke_vpc_a.vpc_id
   transit_gateway_id                              = aws_ec2_transit_gateway.tgw.id
@@ -37,6 +43,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_a_tgw_attachment" {
 
 }
 
+#------------------------------------------------------------------------
+# Spoke VPA B - TGW Attachment
+#------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_b_tgw_attachment" {
   vpc_id                                          = module.spoke_vpc_b.vpc_id
   transit_gateway_id                              = aws_ec2_transit_gateway.tgw.id
@@ -54,6 +63,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_b_tgw_attachment" {
 
 }
 
+#------------------------------------------------------------------------
+# Firewall Inspection VPC  - TGW Attachment
+#------------------------------------------------------------------------
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "inspection_vpc_tgw_attachment" {
   vpc_id             = aws_vpc.inspection_vpc.id
@@ -83,3 +95,37 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "inspection_vpc_tgw_attachment
 
 }
 
+#------------------------------------------------------------------------
+# Firewall TGW Route Table
+# #------------------------------------------------------------------------
+resource "aws_ec2_transit_gateway_route_table" "firewall_tgw_route_table" {
+  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+
+  tags = {
+    Name      = "firewall_tgw_route_table"
+    ManagedBy = "Terraform"
+
+  }
+
+}
+
+
+
+
+
+
+
+#------------------------------------------------------------------------
+# Spoke TGW Route Table
+#------------------------------------------------------------------------
+
+resource "aws_ec2_transit_gateway_route_table" "spoke_tgw_route_table" {
+
+  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+
+  tags = {
+    Name      = "spoke_tgw_route_table"
+    ManagedBy = "Terraform"
+
+  }
+}
