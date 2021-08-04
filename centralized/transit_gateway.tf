@@ -7,9 +7,11 @@ resource "aws_ec2_transit_gateway" "tgw" {
   default_route_table_association = "disable"
 
   tags = {
-    Name = "development-transit-gateway"
+    Name      = "development-transit-gateway"
+    ManagedBy = "Terraform"
 
   }
 
 
 }
+
