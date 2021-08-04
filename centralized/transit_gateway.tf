@@ -6,5 +6,10 @@ resource "aws_ec2_transit_gateway" "tgw" {
   default_route_table_propagation = "enable"
   default_route_table_association = "disable"
 
+  tags = {
+    Name = "development-transit-gateway"
+
+  }
+
 
 }
