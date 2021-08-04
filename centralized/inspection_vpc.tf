@@ -89,15 +89,15 @@ resource "aws_subnet" "inspection_vpc_tgw_subnet_c" {
 resource "aws_route_table" "inspection_vpc_firewall_rt" {
   vpc_id = aws_vpc.inspection_vpc.id
 
-  # route {
-  #   cidr_block      = "0.0.0.0/0"
-  #   vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
-  # }
-  #
-  # depends_on = [
-  #   aws_networkfirewall_firewall.nfw
-  # ]
-  #
+  route {
+    cidr_block      = "0.0.0.0/0"
+    vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+  }
+
+  depends_on = [
+    aws_networkfirewall_firewall.nfw
+  ]
+
   tags = {
     Name = "inspection-vpc/firewall-route-table"
   }
@@ -129,10 +129,10 @@ resource "aws_route_table_association" "firewall_subnet_association_c" {
 resource "aws_route_table" "inspection_vpc_tgw_rt" {
   vpc_id = aws_vpc.inspection_vpc.id
 
-  # route {
-  #   cidr_block         = "0.0.0.0/0"
-  #   transit_gateway_id = module.tgw.ec2_transit_gateway_id
-  # }
+  route {
+    cidr_block         = "0.0.0.0/0"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  }
 
   # depends_on = [
   #   module.tgw.ec2_transit_gateway_id
