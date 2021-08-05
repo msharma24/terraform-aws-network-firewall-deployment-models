@@ -116,6 +116,21 @@ resource "aws_ec2_transit_gateway_route" "firewall_tgw_route" {
 
 }
 
+resource "aws_ec2_transit_gateway_route" "spoke_vpc_a_firewall_tgw_route" {
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_tgw_route_table.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_a_tgw_attachment.id
+  destination_cidr_block         = module.spoke_vpc_a.vpc_cidr_block
+  blackhole                      = false
+
+}
+
+resource "aws_ec2_transit_gateway_route" "spoke_vpc_b_firewall_tgw_route" {
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_tgw_route_table.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_tgw_attachment.id
+  destination_cidr_block         = module.spoke_vpc_b.vpc_cidr_block
+  blackhole                      = false
+
+}
 resource "aws_ec2_transit_gateway_route_table_association" "inspection_vpc_assoc" {
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_vpc_tgw_attachment.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_tgw_route_table.id
