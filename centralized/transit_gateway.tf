@@ -71,9 +71,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "inspection_vpc_tgw_attachment
   vpc_id             = aws_vpc.inspection_vpc.id
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   subnet_ids = [
-    aws_subnet.inspection_vpc_tgw_subnet_a.id,
-    aws_subnet.inspection_vpc_tgw_subnet_b.id,
-    aws_subnet.inspection_vpc_tgw_subnet_c.id
+    aws_subnet.inspection_vpc_firewall_subnet_c.id,
+    aws_subnet.inspection_vpc_firewall_subnet_b.id,
+    aws_subnet.inspection_vpc_firewall_subnet_a.id
+
+
   ]
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = true
@@ -140,9 +142,6 @@ resource "aws_ec2_transit_gateway_route_table_association" "inspection_vpc_assoc
 
 
 
-
-
-
 #------------------------------------------------------------------------
 # Spoke TGW Route Table
 #------------------------------------------------------------------------
@@ -157,3 +156,57 @@ resource "aws_ec2_transit_gateway_route_table" "spoke_tgw_route_table" {
 
   }
 }
+
+
+resource "aws_ec2_transit_gateway_route" "spoke_tgw_route" {
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_tgw_route_table.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_vpc_tgw_attachment.id
+  destination_cidr_block         = "0.0.0.0/0"
+
+}
+
+resource "aws_ec2_transit_gateway_route_table_association" "spoke_vpc_a_assoc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_a_tgw_attachment.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_tgw_route_table.id
+
+}
+
+
+resource "aws_ec2_transit_gateway_route_table_association" "spoke_vpc_b_assoc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_tgw_attachment.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_tgw_route_table.id
+
+}
+
+
+
+################################################################################
+# Transit Gateway Route in the attached vpc subnets
+################################################################################
+
+
+resource "aws_route" "spoke_vpc_a_tgw_route" {
+  count                  = length(module.spoke_vpc_a.private_route_table_ids)
+  route_table_id         = module.spoke_vpc_a.private_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = aws_ec2_transit_gateway.tgw.id
+
+  depends_on = [
+    aws_ec2_transit_gateway.tgw
+  ]
+
+}
+
+
+resource "aws_route" "spoke_vpc_b_tgw_route" {
+  count                  = length(module.spoke_vpc_b.private_route_table_ids)
+  route_table_id         = module.spoke_vpc_b.private_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = aws_ec2_transit_gateway.tgw.id
+  depends_on = [
+    aws_ec2_transit_gateway.tgw
+  ]
+
+}
+
+

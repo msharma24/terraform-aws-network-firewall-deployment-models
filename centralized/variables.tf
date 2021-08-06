@@ -3,3 +3,7 @@ variable "amazon_side_asn" {
   type        = string
   default     = "64512"
 }
+
+variable "environment" {
+  default = "dev"
+}
