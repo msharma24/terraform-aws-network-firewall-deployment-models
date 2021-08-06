@@ -38,3 +38,27 @@ resource "aws_networkfirewall_firewall" "nfw" {
   }
 
 }
+
+resource "aws_cloudwatch_log_group" "example" {
+  name = "ngw-log-group"
+
+}
+
+
+
+
+
+
+# Logging
+resource "aws_networkfirewall_logging_configuration" "example" {
+  firewall_arn = aws_networkfirewall_firewall.nfw.arn
+  logging_configuration {
+    log_destination_config {
+      log_destination = {
+        logGroup = aws_cloudwatch_log_group.example.name
+      }
+      log_destination_type = "CloudWatchLogs"
+      log_type             = "ALERT"
+    }
+  }
+}
