@@ -24,7 +24,7 @@ resource "aws_networkfirewall_firewall" "nfw" {
     for_each = [
       aws_subnet.inspection_vpc_tgw_subnet_a.id,
       aws_subnet.inspection_vpc_tgw_subnet_b.id,
-      #      aws_subnet.inspection_vpc_tgw_subnet_c.id,
+      aws_subnet.inspection_vpc_tgw_subnet_c.id,
     ]
 
     content {

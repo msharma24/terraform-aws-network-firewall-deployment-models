@@ -104,6 +104,41 @@ resource "aws_route_table" "inspection_vpc_firewall_rt" {
 
 }
 
+resource "aws_route_table" "inspection_vpc_tgw_rt_2" {
+  vpc_id = aws_vpc.inspection_vpc.id
+
+  route {
+    cidr_block      = "0.0.0.0/0"
+    vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
+  }
+
+  depends_on = [
+    aws_networkfirewall_firewall.nfw
+  ]
+
+  tags = {
+    Name = "inspection-vpc/firewall-route-table-2"
+  }
+
+}
+
+resource "aws_route_table" "inspection_vpc_tgw_rt_3" {
+  vpc_id = aws_vpc.inspection_vpc.id
+  route {
+    cidr_block      = "0.0.0.0/0"
+    vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[2]
+  }
+
+  depends_on = [
+    aws_networkfirewall_firewall.nfw
+  ]
+
+  tags = {
+    Name = "inspection-vpc/firewall-route-table-3"
+  }
+
+}
+
 resource "aws_route_table_association" "firewall_subnet_association_a" {
   subnet_id      = aws_subnet.inspection_vpc_firewall_subnet_a.id
   route_table_id = aws_route_table.inspection_vpc_firewall_rt.id
