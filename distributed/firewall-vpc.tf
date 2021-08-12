@@ -181,7 +181,7 @@ resource "aws_route" "public_subnet_1_route" {
 resource "aws_route" "public_subnet_2_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.public_route_table_2.id
-  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
 
 
 }
