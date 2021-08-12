@@ -19,8 +19,8 @@ resource "aws_networkfirewall_firewall_policy" "test" {
 }
 
 resource "aws_networkfirewall_firewall" "anfw" {
-  name        = "NetworkFirewall"
-  description = "AWS NetworkFirewall Service"
+  name        = "aws-network-firewall-nfw-demo-dev"
+  description = "AWS NetworkFirewall Service Distributed model demo"
 
   vpc_id              = aws_vpc.vpc.id
   firewall_policy_arn = aws_networkfirewall_firewall_policy.test.arn
@@ -37,7 +37,7 @@ resource "aws_networkfirewall_firewall" "anfw" {
   }
 
   tags = {
-    Name = "NetworkFirewall"
+    Name = "Distributed-NetworkFirewall"
   }
 
 
