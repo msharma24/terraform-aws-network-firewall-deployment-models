@@ -52,3 +52,12 @@ output "nat_gateway_2_id" {
   description = "NAT Gateway 2 ID"
   value       = aws_nat_gateway.nat_gateway_2.id
 }
+
+output "az_1" {
+  value = data.aws_availability_zones.available.names[0]
+}
+
+
+output "az_2" {
+  value = data.aws_availability_zones.available.names[1]
+}

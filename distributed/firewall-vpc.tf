@@ -1,5 +1,4 @@
 #-----------------------------------------------------------------------------
-#VPC
 #-----------------------------------------------------------------------------
 resource "aws_vpc" "vpc" {
   cidr_block         = "10.1.0.0/16"
@@ -28,7 +27,8 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_subnet" "firewall_subnet_1" {
   cidr_block        = "10.1.16.0/28"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = data.aws_availability_zones.available.names[0]
+
 
   tags = {
     Name = "firewall-subnet-1-nfw-demo-dev"
@@ -39,7 +39,7 @@ resource "aws_subnet" "firewall_subnet_1" {
 resource "aws_subnet" "firewall_subnet_2" {
   cidr_block        = "10.1.16.16/28"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
     Name = "firewall-subnet-2-nfw-demo-dev"
@@ -112,7 +112,7 @@ resource "aws_route" "firewall_subnet_2_route" {
 resource "aws_subnet" "public_subnet_1" {
   cidr_block        = "10.1.1.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
     Name = "public-subnet-1-nfw-demo-dev"
@@ -123,7 +123,7 @@ resource "aws_subnet" "public_subnet_1" {
 resource "aws_subnet" "public_subnet_2" {
   cidr_block        = "10.1.3.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
     Name = "public-subnet-1-nfw-demo-dev"
@@ -197,7 +197,7 @@ resource "aws_route" "public_subnet_2_route" {
 resource "aws_subnet" "private_subnet_1" {
   cidr_block        = "10.1.0.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
     Name = "private-subnet-1-nfw-demo-dev"
@@ -208,7 +208,7 @@ resource "aws_subnet" "private_subnet_1" {
 resource "aws_subnet" "private_subnet_2" {
   cidr_block        = "10.1.2.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
     Name = "private-subnet-2-nfw-demo-dev"
