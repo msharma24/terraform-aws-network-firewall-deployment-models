@@ -19,7 +19,7 @@ resource "aws_networkfirewall_firewall_policy" "test" {
 }
 
 resource "aws_networkfirewall_firewall" "anfw" {
-  name        = "aws-network-firewall-nfw-demo-dev"
+  name        = "NetworkFirewall"
   description = "AWS NetworkFirewall Service Distributed model demo"
 
   vpc_id              = aws_vpc.vpc.id
@@ -40,5 +40,39 @@ resource "aws_networkfirewall_firewall" "anfw" {
     Name = "Distributed-NetworkFirewall"
   }
 
+
+}
+
+#---------------------------------------------------------
+# Logging Configuration
+#---------------------------------------------------------
+resource "aws_cloudwatch_log_group" "anfw_alert_log_group" {
+  name = "/nfw-demo-dev/anfw/alert"
+
+}
+
+resource "aws_cloudwatch_log_group" "anfw_flow_log_group" {
+  name = "/nfw-demo-dev/anfw/flow"
+
+}
+
+resource "aws_networkfirewall_logging_configuration" "anfw_alert_log_config" {
+  firewall_arn = aws_networkfirewall_firewall.anfw.arn
+  logging_configuration {
+    log_destination_config {
+      log_destination = {
+        logGroup = aws_cloudwatch_log_group.anfw_alert_log_group.name
+      }
+      log_destination_type = "CloudWatchLogs"
+      log_type             = "ALERT"
+    }
+    log_destination_config {
+      log_destination = {
+        logGroup = aws_cloudwatch_log_group.anfw_alert_log_group.name
+      }
+      log_destination_type = "CloudWatchLogs"
+      log_type             = "FLOW"
+    }
+  }
 
 }
