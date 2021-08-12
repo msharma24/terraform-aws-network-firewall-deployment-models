@@ -70,4 +70,40 @@ resource "aws_route_table_association" "malicious_subnet_association" {
 #----------------------------------------------------------------------------
 # NACL
 #----------------------------------------------------------------------------
+resource "aws_network_acl" "main" {
+  vpc_id     = aws_vpc.malicious_vpc.id
+  subnet_ids = [aws_subnet.malicious_subnet.id]
+
+  egress = [
+    {
+      protocol        = "tcp"
+      rule_no         = 100
+      action          = "allow"
+      from_port       = 0
+      to_port         = 65535
+      icmp_type       = 0
+      icmp_code       = 0
+      ipv6_cidr_block = ""
+      cidr_block      = "0.0.0.0/0"
+    }
+  ]
+
+  ingress = [
+    {
+      protocol        = "tcp"
+      rule_no         = 100
+      action          = "allow"
+      from_port       = 0
+      to_port         = 65535
+      icmp_type       = 0
+      icmp_code       = 0
+      ipv6_cidr_block = ""
+      cidr_block      = "0.0.0.0/0"
+    }
+  ]
+
+  tags = {
+    Name = "MaliciousPublicNACL"
+  }
+}
 
