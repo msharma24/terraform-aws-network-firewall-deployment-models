@@ -1,12 +1,11 @@
 #-----------------------------------------------------------------------------
-#VPC
 #-----------------------------------------------------------------------------
 resource "aws_vpc" "vpc" {
   cidr_block         = "10.1.0.0/16"
   enable_dns_support = true
 
   tags = {
-    Name = "firewall-demo-vpc"
+    Name = "spoke-vpc-a-nfw-demo-dev"
   }
 }
 
@@ -17,7 +16,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "firewall-demo-vpc-igw"
+    Name = "spoke-vpc-a-igwnfw-demo-dev"
   }
 
 }
@@ -28,10 +27,11 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_subnet" "firewall_subnet_1" {
   cidr_block        = "10.1.16.0/28"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = data.aws_availability_zones.available.names[0]
+
 
   tags = {
-    Name = "firewall_subnet_1"
+    Name = "firewall-subnet-1-nfw-demo-dev"
   }
 
 }
@@ -39,10 +39,10 @@ resource "aws_subnet" "firewall_subnet_1" {
 resource "aws_subnet" "firewall_subnet_2" {
   cidr_block        = "10.1.16.16/28"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    Name = "firewall_subnet_2"
+    Name = "firewall-subnet-2-nfw-demo-dev"
   }
 
 }
@@ -55,7 +55,7 @@ resource "aws_route_table" "firewall_route_table_1" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "firewall_route_table_1"
+    Name = "firewall-route-table-1-nfw-demo-dev"
   }
 
 }
@@ -65,7 +65,7 @@ resource "aws_route_table" "firewall_route_table_2" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "firewall_route_table_2"
+    Name = "firewall-route-table-1-nfw-demo-dev"
   }
 
 }
@@ -112,10 +112,10 @@ resource "aws_route" "firewall_subnet_2_route" {
 resource "aws_subnet" "public_subnet_1" {
   cidr_block        = "10.1.1.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name = "public_subnet_1"
+    Name = "public-subnet-1-nfw-demo-dev"
   }
 
 }
@@ -123,10 +123,10 @@ resource "aws_subnet" "public_subnet_1" {
 resource "aws_subnet" "public_subnet_2" {
   cidr_block        = "10.1.3.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    Name = "public_subnet_2"
+    Name = "public-subnet-1-nfw-demo-dev"
   }
 
 }
@@ -139,7 +139,7 @@ resource "aws_route_table" "public_route_table_1" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "public_route_table_1"
+    Name = "public-route-table-1-nfw-demo-dev"
   }
 
 }
@@ -149,7 +149,7 @@ resource "aws_route_table" "public_route_table_2" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "public_route_table_2"
+    Name = "public-route-table-1-nfw-demo-dev"
   }
 
 }
@@ -181,7 +181,7 @@ resource "aws_route" "public_subnet_1_route" {
 resource "aws_route" "public_subnet_2_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.public_route_table_2.id
-  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
 
 
 }
@@ -197,10 +197,10 @@ resource "aws_route" "public_subnet_2_route" {
 resource "aws_subnet" "private_subnet_1" {
   cidr_block        = "10.1.0.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name = "private_subnet_1"
+    Name = "private-subnet-1-nfw-demo-dev"
   }
 
 }
@@ -208,10 +208,10 @@ resource "aws_subnet" "private_subnet_1" {
 resource "aws_subnet" "private_subnet_2" {
   cidr_block        = "10.1.2.0/24"
   vpc_id            = aws_vpc.vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    Name = "private_subnet_2"
+    Name = "private-subnet-2-nfw-demo-dev"
   }
 
 }
@@ -224,7 +224,7 @@ resource "aws_route_table" "private_route_table_1" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "private_route_table_1"
+    Name = "private-route-table-1-nfw-demo-dev"
   }
 
 }
@@ -234,7 +234,7 @@ resource "aws_route_table" "private_route_table_2" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "private_route_table_2"
+    Name = "private-route-table-2-nfw-demo-dev"
   }
 
 }
@@ -286,7 +286,7 @@ resource "aws_route_table" "ingress_route_table" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "ingress_route_table"
+    Name = "ingress-route-table-nfw-demo-dev"
   }
 
 }
