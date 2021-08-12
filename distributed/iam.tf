@@ -62,3 +62,8 @@ resource "aws_iam_role_policy_attachment" "managed_policy_attach" {
   role       = aws_iam_role.malicious_instance_iam_role.name
 }
 
+resource "aws_iam_instance_profile" "malicious_instance_iam_profile" {
+  name = "MaliciousInstanceProfile-${random_id.random_id.hex}"
+  role = aws_iam_role.malicious_instance_iam_role.name
+
+}
