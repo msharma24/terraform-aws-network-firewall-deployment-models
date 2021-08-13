@@ -1,3 +1,6 @@
+#--------------------------------------------------------------------------
+# Malicious VPC
+#--------------------------------------------------------------------------
 resource "aws_security_group" "malicious_instance_sg" {
   name        = "MaliciousSecurityGroup"
   description = "MaliciousSecurityGroup"
