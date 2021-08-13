@@ -11,7 +11,7 @@ resource "aws_security_group" "malicious_instance_sg" {
       to_port          = 443
       protocol         = "tcp"
       cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = []
+      ipv6_cidr_blocks = ["::/0"]
       security_groups  = []
       self             = false
       prefix_list_ids  = []
@@ -21,11 +21,11 @@ resource "aws_security_group" "malicious_instance_sg" {
   egress = [
     {
       description      = "MaliciousSecurityGroupRule"
-      from_port        = 443
-      to_port          = 443
+      from_port        = 0
+      to_port          = 0
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = []
+      ipv6_cidr_blocks = ["::/0"]
       security_groups  = []
       self             = false
       prefix_list_ids  = []
@@ -61,12 +61,11 @@ data "template_file" "malicious_userdata" {
 }
 
 resource "aws_instance" "malicious_instance" {
-  ami                         = data.aws_ami.amazon-linux-2.id
-  subnet_id                   = aws_subnet.malicious_subnet.id
-  instance_type               = "m5.large"
-  associate_public_ip_address = false
-  iam_instance_profile        = aws_iam_instance_profile.malicious_instance_iam_profile.id
-  user_data                   = data.template_file.malicious_userdata.rendered
+  ami                  = data.aws_ami.amazon-linux-2.id
+  subnet_id            = aws_subnet.malicious_subnet.id
+  instance_type        = "m5.large"
+  iam_instance_profile = aws_iam_instance_profile.malicious_instance_iam_profile.id
+  user_data            = data.template_file.malicious_userdata.rendered
 
   tags = {
 
