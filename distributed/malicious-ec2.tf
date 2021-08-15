@@ -64,11 +64,12 @@ data "template_file" "malicious_userdata" {
 }
 
 resource "aws_instance" "malicious_instance" {
-  ami                  = data.aws_ami.amazon-linux-2.id
-  subnet_id            = aws_subnet.malicious_subnet.id
-  instance_type        = "m5.large"
-  iam_instance_profile = aws_iam_instance_profile.malicious_instance_iam_profile.id
-  user_data            = data.template_file.malicious_userdata.rendered
+  ami                    = data.aws_ami.amazon-linux-2.id
+  subnet_id              = aws_subnet.malicious_subnet.id
+  instance_type          = "m5.large"
+  iam_instance_profile   = aws_iam_instance_profile.malicious_instance_iam_profile.id
+  user_data              = data.template_file.malicious_userdata.rendered
+  vpc_security_group_ids = [aws_security_group.malicious_instance_sg.id]
 
   tags = {
 

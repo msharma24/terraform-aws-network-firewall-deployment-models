@@ -380,6 +380,7 @@ resource "aws_security_group" "endpoint_security_group" {
   }
 
 }
+
 resource "aws_vpc_endpoint" "ssm_endpoint" {
   vpc_id       = aws_vpc.vpc.id
   service_name = "com.amazonaws.${var.region}.ssm"

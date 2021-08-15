@@ -1,3 +1,60 @@
+resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
+  name = "domain-allow-fw-rule-group"
+  #  -${random_id.random_id.hex}"
+  capacity = 100
+  type     = "STATEFUL"
+
+  rule_group {
+    rule_variables {
+      ip_sets {
+        key = "HOME_NET"
+        ip_set {
+          definition = ["10.0.0.0/8"]
+        }
+      }
+    }
+
+    rules_source {
+      rules_source_list {
+        generated_rules_type = "ALLOWLIST"
+        target_types         = ["HTTP_HOST", "TLS_SNI"]
+        targets              = [".amazon.com", ".amazonaws.com"]
+      }
+    }
+
+  }
+
+
+}
+
+resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
+  #name     = "icmp_alert_fw_rule_group-${random_id.random_id.hex}"
+  name     = "icmp-alert-fw-rule-group" # "-${random_id.random_id.hex}"
+  capacity = 100
+  type     = "STATEFUL"
+
+  rule_group {
+    rules_source {
+      stateful_rule {
+        action = "ALERT"
+        header {
+          destination      = "ANY"
+          destination_port = "ANY"
+          protocol         = "ICMP"
+          direction        = "ANY"
+          source           = "ANY"
+          source_port      = "ANY"
+
+        }
+        rule_option {
+          keyword = "sid:1"
+        }
+      }
+    }
+  }
+}
+
+
 resource "aws_networkfirewall_firewall_policy" "test" {
   name = "example"
 
