@@ -33,11 +33,12 @@ data "template_file" "test_instance_userdata" {
 }
 
 resource "aws_instance" "test_instance_1" {
-  ami             = data.aws_ami.amazon-linux-2.id
-  instance_type   = "t2.micro"
-  subnet_id       = aws_subnet.private_subnet_1.id
-  security_groups = [aws_security_group.subnet_security_group.id]
-  user_data       = data.template_file.test_instance_userdata.rendered
+  ami                  = data.aws_ami.amazon-linux-2.id
+  instance_type        = "t2.micro"
+  subnet_id            = aws_subnet.private_subnet_1.id
+  security_groups      = [aws_security_group.subnet_security_group.id]
+  iam_instance_profile = aws_iam_instance_profile.subnet_instance_iam_profile.id
+  user_data            = data.template_file.test_instance_userdata.rendered
 
   tags = {
     Name = "test-instance-1"
@@ -45,10 +46,11 @@ resource "aws_instance" "test_instance_1" {
 }
 
 resource "aws_instance" "test_instance_2" {
-  ami             = data.aws_ami.amazon-linux-2.id
-  instance_type   = "t2.micro"
-  subnet_id       = aws_subnet.private_subnet_1.id
-  security_groups = [aws_security_group.subnet_security_group.id]
+  ami                  = data.aws_ami.amazon-linux-2.id
+  instance_type        = "t2.micro"
+  subnet_id            = aws_subnet.private_subnet_1.id
+  security_groups      = [aws_security_group.subnet_security_group.id]
+  iam_instance_profile = aws_iam_instance_profile.subnet_instance_iam_profile.id
 
   tags = {
     Name = "test-instance-2"

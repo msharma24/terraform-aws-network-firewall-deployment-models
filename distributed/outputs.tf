@@ -1,6 +1,10 @@
-output "vpc_id" {
+output "firewall_vpc_id" {
   description = "Firewall Demo VPC ID"
   value       = aws_vpc.vpc.id
+}
+
+output "malicious_vpc_id" {
+  value = aws_vpc.malicious_vpc.id
 }
 
 output "firewall_route_table_1" {
