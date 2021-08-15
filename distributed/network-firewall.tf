@@ -53,23 +53,26 @@ resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
 }
 
 
-resource "aws_networkfirewall_firewall_policy" "test" {
-  name = "example"
+resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
+  name = "firewall-policy"
 
   firewall_policy {
-    stateless_default_actions          = ["aws:pass", "ExampleCustomAction"]
-    stateless_fragment_default_actions = ["aws:drop"]
+    stateless_default_actions          = ["aws:forward_to_sfe"]
+    stateless_fragment_default_actions = ["aws:forward_to_sfe"]
 
-    stateless_custom_action {
-      action_definition {
-        publish_metric_action {
-          dimension {
-            value = "1"
-          }
-        }
-      }
-      action_name = "ExampleCustomAction"
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.icmp_alert_fw_rule_group.arn
     }
+
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.domain_allow_fw_rule_group.arn
+    }
+
+
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -78,7 +81,7 @@ resource "aws_networkfirewall_firewall" "anfw" {
   description = "AWS NetworkFirewall Service Distributed model demo"
 
   vpc_id              = aws_vpc.vpc.id
-  firewall_policy_arn = aws_networkfirewall_firewall_policy.test.arn
+  firewall_policy_arn = aws_networkfirewall_firewall_policy.firewall_policy.arn
 
   dynamic "subnet_mapping" {
     for_each = [
