@@ -1,20 +1,78 @@
-resource "aws_networkfirewall_firewall_policy" "test" {
-  name = "example"
+resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
+  name     = "domain-allow-fw-rule-group"
+  capacity = 100
+  type     = "STATEFUL"
 
-  firewall_policy {
-    stateless_default_actions          = ["aws:pass", "ExampleCustomAction"]
-    stateless_fragment_default_actions = ["aws:drop"]
-
-    stateless_custom_action {
-      action_definition {
-        publish_metric_action {
-          dimension {
-            value = "1"
-          }
+  rule_group {
+    rule_variables {
+      ip_sets {
+        key = "HOME_NET"
+        ip_set {
+          definition = ["10.0.0.0/8"]
         }
       }
-      action_name = "ExampleCustomAction"
     }
+
+    rules_source {
+      rules_source_list {
+        generated_rules_type = "ALLOWLIST"
+        target_types         = ["HTTP_HOST", "TLS_SNI"]
+        targets              = [".amazon.com", ".amazonaws.com"]
+      }
+    }
+
+  }
+
+
+}
+
+resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
+  name     = "icmp-alert-fw-rule-group" # "-${random_id.random_id.hex}"
+  capacity = 100
+  type     = "STATEFUL"
+
+  rule_group {
+    rules_source {
+      stateful_rule {
+        action = "ALERT"
+        header {
+          destination      = "ANY"
+          destination_port = "ANY"
+          protocol         = "ICMP"
+          direction        = "ANY"
+          source           = "ANY"
+          source_port      = "ANY"
+
+        }
+        rule_option {
+          keyword = "sid:1"
+        }
+      }
+    }
+  }
+}
+
+
+resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
+  name = "firewall-policy"
+
+  firewall_policy {
+    stateless_default_actions          = ["aws:forward_to_sfe"]
+    stateless_fragment_default_actions = ["aws:forward_to_sfe"]
+
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.icmp_alert_fw_rule_group.arn
+    }
+
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.domain_allow_fw_rule_group.arn
+    }
+
+
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -23,7 +81,7 @@ resource "aws_networkfirewall_firewall" "anfw" {
   description = "AWS NetworkFirewall Service Distributed model demo"
 
   vpc_id              = aws_vpc.vpc.id
-  firewall_policy_arn = aws_networkfirewall_firewall_policy.test.arn
+  firewall_policy_arn = aws_networkfirewall_firewall_policy.firewall_policy.arn
 
   dynamic "subnet_mapping" {
     for_each = [

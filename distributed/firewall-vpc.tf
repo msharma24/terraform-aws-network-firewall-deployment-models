@@ -1,8 +1,10 @@
 #-----------------------------------------------------------------------------
+# Firewall VPC
 #-----------------------------------------------------------------------------
 resource "aws_vpc" "vpc" {
-  cidr_block         = "10.1.0.0/16"
-  enable_dns_support = true
+  cidr_block           = "10.1.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   tags = {
     Name = "spoke-vpc-a-nfw-demo-dev"
@@ -346,4 +348,81 @@ resource "aws_nat_gateway" "nat_gateway_2" {
   tags = {
     Name = "nat_gateway_2"
   }
+}
+
+
+#-----------------------------------------------------------------------------
+#  AWS PrivateLink interface endpoint for services:
+#-----------------------------------------------------------------------------
+resource "aws_security_group" "endpoint_security_group" {
+  name        = "vpce-sg-1-${random_id.random_id.hex}"
+  description = "Allow instances to get to SSM Systems Manager"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress = [
+    {
+      description      = "All 443"
+      from_port        = 443
+      to_port          = 443
+      protocol         = "tcp"
+      ipv6_cidr_blocks = ["::/0"]
+      cidr_blocks      = ["10.1.0.0/16"]
+      self             = false
+      security_groups  = []
+      prefix_list_ids  = []
+    }
+  ]
+  egress = [
+    {
+      description      = "Allow All outbound"
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      prefix_list_ids  = []
+      security_groups  = []
+      self             = false
+    }
+  ]
+
+
+
+  tags = {
+    Name = "vpce-sg-1-${random_id.random_id.hex}"
+  }
+
+}
+
+resource "aws_vpc_endpoint" "ssm_endpoint" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws.${var.region}.ssm"
+
+  security_group_ids = [
+    aws_security_group.endpoint_security_group.id
+  ]
+
+  subnet_ids = [
+    aws_subnet.public_subnet_1.id,
+  aws_subnet.public_subnet_2.id]
+
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+}
+
+resource "aws_vpc_endpoint" "ec2messages_endpoint" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws.${var.region}.ec2messages"
+
+  security_group_ids = [
+    aws_security_group.endpoint_security_group.id
+  ]
+  subnet_ids = [
+    aws_subnet.public_subnet_1.id,
+  aws_subnet.public_subnet_2.id]
+
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
 }
