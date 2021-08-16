@@ -17,6 +17,19 @@ resource "aws_security_group" "subnet_security_group" {
     }
   ]
 
+  egress = [
+    {
+      description      = "Allow All outbound"
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      prefix_list_ids  = []
+      security_groups  = []
+      self             = false
+    }
+  ]
 
 
   tags = {
