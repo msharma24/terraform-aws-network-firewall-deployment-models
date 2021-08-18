@@ -90,12 +90,20 @@ resource "aws_ec2_transit_gateway_route_table" "spoke_rt_table" {
 
 }
 
+data "aws_ec2_transit_gateway_vpc_attachment" "inspection_vpc_attachment" {
+  filter {
+    name   = "vpc-id"
+    values = [aws_vpc.inspection_vpc.id]
+  }
+}
 
 
+resource "aws_ec2_transit_gateway_route" "spoke_vpc_a_tgw_route" {
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_rt_table.id
+  destination_cidr_block         = "0.0.0.0/0"
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.inspection_vpc_attachment.id
 
-
-
-
+}
 
 
 #------------------------------------------------------------------------
