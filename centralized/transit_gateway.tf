@@ -26,6 +26,26 @@ module "tgw" {
       transit_gateway_default_route_table_propagation = true
       ipv6_support                                    = false
       transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.spoke_rt_table.id
+    },
+    inspection_vpc = {
+      vpc_id = aws_vpc.inspection_vpc.id
+      subnet_ids = [
+        aws_subnet.inspection_vpc_firewall_subnet_a.id,
+        aws_subnet.inspection_vpc_firewall_subnet_b.id,
+        aws_subnet.inspection_vpc_firewall_subnet_c.id,
+      ]
+      transit_gateway_default_route_table_association = false
+      transit_gateway_default_route_table_propagation = true
+      ipv6_support                                    = false
+      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+    },
+    egress_vpc = {
+      vpc_id                                          = module.egress_vpc.vpc_id
+      subnet_ids                                      = module.egress_vpc.private_subnets
+      transit_gateway_default_route_table_association = false
+      transit_gateway_default_route_table_propagation = true
+      ipv6_support                                    = false
+      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.egress_rt_table.id
     }
   }
 
@@ -47,6 +67,10 @@ resource "aws_ec2_transit_gateway_route_table" "egress_rt_table" {
 
 }
 
+#------------------------------------------------------------------------
+# Firewall  Transit Gateway  Route Table
+#------------------------------------------------------------------------
+
 resource "aws_ec2_transit_gateway_route_table" "firewall_rt_table" {
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
   tags = {
@@ -55,7 +79,9 @@ resource "aws_ec2_transit_gateway_route_table" "firewall_rt_table" {
 
 }
 
-
+#------------------------------------------------------------------------
+# Spoke  Transit Gateway  Route Table
+#------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway_route_table" "spoke_rt_table" {
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
   tags = {
