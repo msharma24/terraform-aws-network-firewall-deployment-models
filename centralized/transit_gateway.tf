@@ -79,6 +79,60 @@ resource "aws_ec2_transit_gateway_route_table" "firewall_rt_table" {
 
 }
 
+data "aws_ec2_transit_gateway_vpc_attachment" "egress_vpc_attachment" {
+  filter {
+    name   = "vpc-id"
+    values = [module.egress_vpc.vpc_id]
+  }
+
+  depends_on = [
+    module.tgw.transit_gateway_id
+  ]
+}
+
+data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_a_attachment" {
+  filter {
+    name   = "vpc-id"
+    values = [module.spoke_vpc_a.vpc_id]
+  }
+
+  depends_on = [
+    module.tgw.transit_gateway_id
+  ]
+}
+
+data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_b_attachment" {
+  filter {
+    name   = "vpc-id"
+    values = [module.spoke_vpc_b.vpc_id]
+  }
+
+  depends_on = [
+    module.tgw.transit_gateway_id
+  ]
+}
+
+# resource "aws_ec2_transit_gateway_route" "egress_vpc_tgw_route" {
+#   transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.egress_vpc_attachment.id
+#   destination_cidr_block         = "0.0.0.0/0"
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+#
+# }
+
+# resource "aws_ec2_transit_gateway_route" "spoke_vpc_a_tgw_route" {
+#   transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_a_attachment.id
+#   destination_cidr_block         = "0.0.0.0/0"
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+#
+# }
+
+resource "aws_ec2_transit_gateway_route" "spoke_vpc_b_tgw_route" {
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_attachment.id
+  destination_cidr_block         = "0.0.0.0/0"
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+
+}
+
 #------------------------------------------------------------------------
 # Spoke  Transit Gateway  Route Table
 #------------------------------------------------------------------------
@@ -98,7 +152,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "inspection_vpc_attachment" {
 }
 
 
-resource "aws_ec2_transit_gateway_route" "spoke_vpc_a_tgw_route" {
+resource "aws_ec2_transit_gateway_route" "inspection_vpc_tgw_route" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_rt_table.id
   destination_cidr_block         = "0.0.0.0/0"
   transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.inspection_vpc_attachment.id
