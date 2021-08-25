@@ -27,3 +27,13 @@ module "egress_vpc" {
   }
 }
 
+resource "aws_route" "egress_vpc_route_to_tgw" {
+  route_table_id         = module.egress_vpc.public_route_table_ids[0]
+  destination_cidr_block = "10.0.0.0/8"
+  transit_gateway_id     = module.tgw.ec2_transit_gateway_id
+
+  depends_on = [
+    module.tgw
+  ]
+
+}

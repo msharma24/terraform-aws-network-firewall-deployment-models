@@ -93,7 +93,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "egress_vpc_attachment" {
   }
 
   depends_on = [
-    module.tgw.transit_gateway_id
+    module.tgw
   ]
 }
 
@@ -104,7 +104,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_a_attachment" {
   }
 
   depends_on = [
-    module.tgw.transit_gateway_id
+    module.tgw
   ]
 }
 
@@ -115,7 +115,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_b_attachment" {
   }
 
   depends_on = [
-    module.tgw.transit_gateway_id
+    module.tgw
   ]
 }
 
