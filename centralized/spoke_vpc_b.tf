@@ -34,7 +34,7 @@ data "aws_route_tables" "spoke_vpc_b_tgw_route" {
 
   filter {
     name   = "tag:Name"
-    values = ["spoke_vpc_b-private-*"]
+    values = ["spoke_vpc_b-public*"]
   }
 }
 
