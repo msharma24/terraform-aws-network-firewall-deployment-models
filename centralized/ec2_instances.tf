@@ -9,7 +9,7 @@ module "spoke_vpc_a_ec2_instance" {
   instance_type          = "t2.micro"
   monitoring             = true
   vpc_security_group_ids = [module.spoke_vpc_a_ssh_sg.security_group_id]
-  subnet_id              = module.spoke_vpc_a.private_subnets[0]
+  subnet_id              = module.spoke_vpc_a.public_subnets[0]
   iam_instance_profile   = aws_iam_instance_profile.subnet_instance_iam_profile.id
 
   tags = {
@@ -30,7 +30,7 @@ module "spoke_vpc_b_ec2_instance" {
   instance_type          = "t2.micro"
   monitoring             = true
   vpc_security_group_ids = [module.spoke_vpc_b_ssh_sg.security_group_id]
-  subnet_id              = module.spoke_vpc_b.private_subnets[0]
+  subnet_id              = module.spoke_vpc_b.public_subnets[0]
   iam_instance_profile   = aws_iam_instance_profile.subnet_instance_iam_profile.id
 
   tags = {
