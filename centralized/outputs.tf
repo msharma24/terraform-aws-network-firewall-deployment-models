@@ -1,8 +1,7 @@
-# output "tgw_id" {
-#   value = aws_ec2_transit_gateway.tgw.id
-# }
-#
-# output "tgw_default_route_table_id" {
-#   value = aws_ec2_transit_gateway.tgw.association_default_route_table_id
-# }
-#
+output "spoke_vpc_a_ec2_instance_id" {
+  value = module.spoke_vpc_a_ec2_instance.id
+}
+
+output "spoke_vpc_a_ec2_instance_2_id" {
+  value = module.spoke_vpc_a_ec2_instance_2.id
+}

@@ -10,6 +10,7 @@ module "spoke_vpc_a_ec2_instance" {
   monitoring             = true
   vpc_security_group_ids = [module.spoke_vpc_a_ssh_sg.security_group_id]
   subnet_id              = module.spoke_vpc_a.private_subnets[0]
+  iam_instance_profile   = aws_iam_instance_profile.subnet_instance_iam_profile.id
 
   tags = {
     Terraform   = "true"
@@ -29,6 +30,7 @@ module "spoke_vpc_a_ec2_instance_2" {
   monitoring             = true
   vpc_security_group_ids = [module.spoke_vpc_a_ssh_sg.security_group_id]
   subnet_id              = module.spoke_vpc_a.private_subnets[1]
+  iam_instance_profile   = aws_iam_instance_profile.subnet_instance_iam_profile.id
 
   tags = {
     Terraform   = "true"
@@ -48,6 +50,7 @@ module "spoke_vpc_b_ec2_instance" {
   monitoring             = true
   vpc_security_group_ids = [module.spoke_vpc_b_ssh_sg.security_group_id]
   subnet_id              = module.spoke_vpc_b.private_subnets[0]
+  iam_instance_profile   = aws_iam_instance_profile.subnet_instance_iam_profile.id
 
   tags = {
     Terraform   = "true"
@@ -69,6 +72,7 @@ module "spoke_vpc_a_ec2_public_instance" {
   monitoring             = true
   vpc_security_group_ids = [module.spoke_vpc_a_ssh_sg.security_group_id]
   subnet_id              = module.spoke_vpc_a.public_subnets[0]
+  iam_instance_profile   = aws_iam_instance_profile.subnet_instance_iam_profile.id
 
   tags = {
     Terraform   = "true"
