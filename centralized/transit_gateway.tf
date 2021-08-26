@@ -121,10 +121,33 @@ data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_b_attachment" {
 
 resource "aws_ec2_transit_gateway_route" "spoke_vpc_b_tgw_route" {
   transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_attachment.id
+  destination_cidr_block         = module.spoke_vpc_b.vpc_cidr_block
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+
+}
+
+resource "aws_ec2_transit_gateway_route" "egress_vpc_attachment" {
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.egress_vpc_attachment.id
   destination_cidr_block         = "0.0.0.0/0"
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
 
 }
+
+resource "aws_ec2_transit_gateway_route" "spoke_vpc_a_tgw_route" {
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_a_attachment.id
+  destination_cidr_block         = module.spoke_vpc_a.vpc_cidr_block
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+
+}
+
+
+
+# resource "aws_ec2_transit_gateway_route" "egress_vpc_b_tgw_route" {
+#   transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_attachment.id
+#   destination_cidr_block         = module.spoke_vpc_b.vpc_cidr_block
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+#
+# }
 
 #------------------------------------------------------------------------
 # Spoke  Transit Gateway  Route Table
