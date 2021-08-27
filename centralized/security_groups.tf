@@ -60,7 +60,7 @@ module "spoke_vpc_b_https_sg" {
 
   name        = "spoke_vpc_b/security_group-https"
   description = "Security group for https  within VPC"
-  vpc_id      = module.spoke_vpc_a.vpc_id
+  vpc_id      = module.spoke_vpc_b.vpc_id
 
   ingress_cidr_blocks = [module.spoke_vpc_a.vpc_cidr_block,
     module.spoke_vpc_b.vpc_cidr_block,
