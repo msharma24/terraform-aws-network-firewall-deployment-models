@@ -42,6 +42,10 @@ data "aws_route_tables" "spoke_vpc_a_tgw_route" {
     name   = "tag:Name"
     values = ["spoke_vpc_a-public*"]
   }
+
+  depends_on = [
+    module.spoke_vpc_a
+  ]
 }
 
 resource "aws_route" "spoke_vpc_a_tgw_route" {
@@ -51,7 +55,9 @@ resource "aws_route" "spoke_vpc_a_tgw_route" {
   transit_gateway_id     = module.tgw.ec2_transit_gateway_id
 
   depends_on = [
-    module.tgw
+    module.tgw,
+    module.spoke_vpc_a,
+    data.aws_route_tables.spoke_vpc_a_tgw_route
   ]
 }
 

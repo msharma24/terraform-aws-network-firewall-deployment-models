@@ -38,6 +38,10 @@ data "aws_route_tables" "spoke_vpc_b_tgw_route" {
     name   = "tag:Name"
     values = ["spoke_vpc_b-public*"]
   }
+
+  depends_on = [
+    module.spoke_vpc_b
+  ]
 }
 
 resource "aws_route" "spoke_vpc_b_tgw_route" {
@@ -47,12 +51,14 @@ resource "aws_route" "spoke_vpc_b_tgw_route" {
   transit_gateway_id     = module.tgw.ec2_transit_gateway_id
 
   depends_on = [
-    module.tgw
+    module.tgw,
+    module.spoke_vpc_b,
+    data.aws_route_tables.spoke_vpc_b_tgw_route
   ]
 }
 
 ################################################################################
-# VPC Module Spoke VPC A - SSM Endpoint
+# VPC Module Spoke VPC B - SSM Endpoint
 ################################################################################
 data "aws_security_group" "spoke_vpc_b_default_sg" {
   name   = "default"
