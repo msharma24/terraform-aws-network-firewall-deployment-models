@@ -63,7 +63,7 @@ module "spoke_vpc_b_ssm_endpoint" {
 
   source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   vpc_id             = module.spoke_vpc_b.vpc_id
-  security_group_ids = [data.aws_security_group.spoke_vpc_b_default_sg.id]
+  security_group_ids = [module.spoke_vpc_b_https_sg.security_group_id]
 
   endpoints = {
     ssm = {
