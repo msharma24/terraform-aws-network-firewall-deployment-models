@@ -18,6 +18,8 @@ module "spoke_vpc_b" {
   enable_nat_gateway = false
   single_nat_gateway = false
 
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
     Owner       = "user"
@@ -47,4 +49,27 @@ resource "aws_route" "spoke_vpc_b_tgw_route" {
   depends_on = [
     module.tgw
   ]
+}
+
+################################################################################
+# VPC Module Spoke VPC A - SSM Endpoint
+################################################################################
+data "aws_security_group" "spoke_vpc_b_default_sg" {
+  name   = "default"
+  vpc_id = module.spoke_vpc_b.vpc_id
+}
+
+module "spoke_vpc_b_ssm_endpoint" {
+
+  source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  vpc_id             = module.spoke_vpc_b.vpc_id
+  security_group_ids = [data.aws_security_group.spoke_vpc_b_default_sg.id]
+
+  endpoints = {
+    ssm = {
+      service             = "ssm"
+      private_dns_enabled = true
+      subnet_ids          = module.spoke_vpc_b.public_subnets
+    },
+  }
 }
