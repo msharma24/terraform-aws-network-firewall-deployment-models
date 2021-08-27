@@ -81,5 +81,15 @@ module "spoke_vpc_a_ssm_endpoint" {
       private_dns_enabled = true
       subnet_ids          = module.spoke_vpc_a.public_subnets
     },
+    ssmmessages = {
+      service             = "ssmmessages"
+      private_dns_enabled = true,
+      subnet_ids          = module.spoke_vpc_a.public_subnets
+    },
+    ec2messages = {
+      service             = "ec2messages",
+      private_dns_enabled = true,
+      subnet_ids          = module.spoke_vpc_a.public_subnets
+    }
   }
 }
