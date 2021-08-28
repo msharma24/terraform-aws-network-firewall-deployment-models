@@ -28,7 +28,8 @@ module "tgw" {
       transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.spoke_rt_table.id
     },
     inspection_vpc = {
-      vpc_id = aws_vpc.inspection_vpc.id
+      vpc_id                 = aws_vpc.inspection_vpc.id
+      appliance_mode_support = true
       subnet_ids = [
         aws_subnet.inspection_vpc_firewall_subnet_a.id,
         aws_subnet.inspection_vpc_firewall_subnet_b.id,
