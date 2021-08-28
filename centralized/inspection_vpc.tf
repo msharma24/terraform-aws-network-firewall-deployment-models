@@ -166,11 +166,11 @@ resource "aws_route_table" "inspection_vpc_tgw_rt_1" {
 
   route {
     cidr_block         = "0.0.0.0/0"
-    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+    transit_gateway_id = module.tgw.ec2_transit_gateway_id
   }
 
   depends_on = [
-    aws_ec2_transit_gateway.tgw
+    module.tgw
   ]
 
 
@@ -185,11 +185,11 @@ resource "aws_route_table" "inspection_vpc_tgw_rt_2" {
 
   route {
     cidr_block         = "0.0.0.0/0"
-    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+    transit_gateway_id = module.tgw.ec2_transit_gateway_id
   }
 
   depends_on = [
-    aws_ec2_transit_gateway.tgw
+    module.tgw
   ]
 
 
@@ -204,11 +204,11 @@ resource "aws_route_table" "inspection_vpc_tgw_rt_3" {
 
   route {
     cidr_block         = "0.0.0.0/0"
-    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+    transit_gateway_id = module.tgw.ec2_transit_gateway_id
   }
 
   depends_on = [
-    aws_ec2_transit_gateway.tgw
+    module.tgw
   ]
 
 
