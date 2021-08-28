@@ -28,7 +28,6 @@ module "spoke_vpc_a_https_sg" {
 
   ingress_cidr_blocks = [module.spoke_vpc_a.vpc_cidr_block,
     module.spoke_vpc_b.vpc_cidr_block,
-    "0.0.0.0/0"
 
   ]
 }
@@ -49,7 +48,6 @@ module "spoke_vpc_b_ssh_sg" {
 
   ingress_cidr_blocks = [module.spoke_vpc_a.vpc_cidr_block,
     module.spoke_vpc_b.vpc_cidr_block,
-    "0.0.0.0/0"
   ]
 }
 
@@ -64,7 +62,6 @@ module "spoke_vpc_b_https_sg" {
 
   ingress_cidr_blocks = [module.spoke_vpc_a.vpc_cidr_block,
     module.spoke_vpc_b.vpc_cidr_block,
-    "0.0.0.0/0"
 
   ]
 }
