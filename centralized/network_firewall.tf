@@ -39,6 +39,45 @@ resource "aws_networkfirewall_firewall" "nfw" {
 
 }
 
+resource "aws_networkfirewall_rule_group" "drop_spoke_a_spoke_b_traffic_fw_rule_group" {
+  name     = "drop-spoke-a-spoke-b-traffic-fw-rule-group"
+  capacity = 100
+  type     = "STATELESS"
+
+  rule_group {
+    rules_source {
+      stateless_rules_and_custom_actions {
+        stateless_rule {
+          priority = 1
+          rule_definition {
+            actions = ["aws:drop"]
+            match_attributes {
+              protocols = [
+                1, 6
+
+              ]
+              source {
+                address_definition = module.spoke_vpc_a.vpc_cidr_block
+              }
+              destination {
+                address_definition = module.spoke_vpc_b.vpc_cidr_block
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+}
+
+
+
+
+
+
+
 # Logging configuration
 resource "aws_cloudwatch_log_group" "anfw_alert_log_group" {
   name = "/aws/network-firewall/alert"
