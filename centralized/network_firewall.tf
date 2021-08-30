@@ -72,12 +72,6 @@ resource "aws_networkfirewall_rule_group" "drop_spoke_a_spoke_b_traffic_fw_rule_
 
 }
 
-
-
-
-
-
-
 # Logging configuration
 resource "aws_cloudwatch_log_group" "anfw_alert_log_group" {
   name = "/aws/network-firewall/alert"
