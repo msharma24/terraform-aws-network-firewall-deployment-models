@@ -7,6 +7,11 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
   firewall_policy {
     stateless_default_actions          = ["aws:pass"]
     stateless_fragment_default_actions = ["aws:pass"]
+
+    stateless_rule_group_reference {
+      priority     = 1
+      resource_arn = aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group.arn
+    }
   }
 
   tags = {
@@ -39,8 +44,10 @@ resource "aws_networkfirewall_firewall" "nfw" {
 
 }
 
-resource "aws_networkfirewall_rule_group" "drop_spoke_a_spoke_b_traffic_fw_rule_group" {
-  name     = "drop-spoke-a-spoke-b-traffic-fw-rule-group"
+
+# drop ALL ICMP Traffic
+resource "aws_networkfirewall_rule_group" "drop_icmp_traffic_fw_rule_group" {
+  name     = "drop-icmp-traffic-fw-rule-group"
   capacity = 100
   type     = "STATELESS"
 
@@ -52,15 +59,12 @@ resource "aws_networkfirewall_rule_group" "drop_spoke_a_spoke_b_traffic_fw_rule_
           rule_definition {
             actions = ["aws:drop"]
             match_attributes {
-              protocols = [
-                1, 6
-
-              ]
+              protocols = [1]
               source {
-                address_definition = module.spoke_vpc_a.vpc_cidr_block
+                address_definition = "0.0.0.0/0"
               }
               destination {
-                address_definition = module.spoke_vpc_b.vpc_cidr_block
+                address_definition = "0.0.0.0/0"
               }
             }
           }
@@ -68,7 +72,6 @@ resource "aws_networkfirewall_rule_group" "drop_spoke_a_spoke_b_traffic_fw_rule_
       }
     }
   }
-
 
 }
 
