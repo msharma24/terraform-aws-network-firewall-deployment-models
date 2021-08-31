@@ -7,6 +7,11 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
   firewall_policy {
     stateless_default_actions          = ["aws:pass"]
     stateless_fragment_default_actions = ["aws:pass"]
+
+    stateless_rule_group_reference {
+      priority     = 1
+      resource_arn = aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group.arn
+    }
   }
 
   tags = {
@@ -35,6 +40,37 @@ resource "aws_networkfirewall_firewall" "nfw" {
   tags = {
     Name = "centralized-network-firewall"
 
+  }
+
+}
+
+
+# drop ALL ICMP Traffic
+resource "aws_networkfirewall_rule_group" "drop_icmp_traffic_fw_rule_group" {
+  name     = "drop-icmp-traffic-fw-rule-group"
+  capacity = 100
+  type     = "STATELESS"
+
+  rule_group {
+    rules_source {
+      stateless_rules_and_custom_actions {
+        stateless_rule {
+          priority = 1
+          rule_definition {
+            actions = ["aws:drop"]
+            match_attributes {
+              protocols = [1]
+              source {
+                address_definition = "0.0.0.0/0"
+              }
+              destination {
+                address_definition = "0.0.0.0/0"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
 }
