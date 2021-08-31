@@ -12,6 +12,9 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
       priority     = 1
       resource_arn = aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group.arn
     }
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.block_domains_fw_rule_group.arn
+    }
   }
 
   tags = {
@@ -69,6 +72,34 @@ resource "aws_networkfirewall_rule_group" "drop_icmp_traffic_fw_rule_group" {
             }
           }
         }
+      }
+    }
+  }
+
+}
+
+# domain deny list
+resource "aws_networkfirewall_rule_group" "block_domains_fw_rule_group" {
+  name     = "block-domains-fw-rule-group"
+  capacity = 100
+  type     = "STATEFUL"
+  rule_group {
+    rule_variables {
+      ip_sets {
+        key = "HOME_NET"
+        ip_set {
+          definition = [
+            module.spoke_vpc_a.vpc_cidr_block,
+            module.spoke_vpc_b.vpc_cidr_block,
+          ]
+        }
+      }
+    }
+    rules_source {
+      rules_source_list {
+        generated_rules_type = "DENYLIST"
+        target_types         = ["HTTP_HOST", "TLS_SNI"]
+        targets              = [".facebook.com", ".twitter.com"]
       }
     }
   }
