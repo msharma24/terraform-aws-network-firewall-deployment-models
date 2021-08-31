@@ -5,8 +5,8 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
   name = "aws-network-firewall-default-policy"
 
   firewall_policy {
-    stateless_default_actions          = ["aws:pass"]
-    stateless_fragment_default_actions = ["aws:pass"]
+    stateless_default_actions          = ["aws:forward_to_sfe"]
+    stateless_fragment_default_actions = ["aws:forward_to_sfe"]
 
     stateless_rule_group_reference {
       priority     = 1
