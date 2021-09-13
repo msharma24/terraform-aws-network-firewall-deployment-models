@@ -1,7 +1,10 @@
 # Centralized AWS Network Firewall Deployment Model
 
 ## Description
+Centralized AWS Network Firewall Deployment Demo Infrastrcutre.
 
+## Setup
+This configuration has been tested in "ap-southeast-2" and "us-east-1" region
 
 
 
