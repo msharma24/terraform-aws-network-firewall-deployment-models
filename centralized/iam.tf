@@ -14,9 +14,11 @@ module "spoke_instance_iam_assumable_role" {
     "ec2.amazonaws.com"
   ]
 
+  role_requires_mfa       = false
   create_role             = true
   create_instance_profile = true
-  role_name               = "spoke-instance-role-${random_id.random_id.hex}"
+
+  role_name = "spoke-instance-role-${random_id.random_id.hex}"
 
   custom_role_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
