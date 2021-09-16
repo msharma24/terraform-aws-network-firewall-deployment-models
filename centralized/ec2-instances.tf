@@ -1,7 +1,3 @@
-
-
-
-
 module "spoke_vpc_a_ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 2.0"
@@ -30,12 +26,24 @@ module "spoke_vpc_b_ec2_instance" {
   name           = "${var.environment}/spoke_vpc_b_instance"
   instance_count = 1
 
-  ami                    = data.aws_ami.amazon-linux-2.id
-  instance_type          = "t2.micro"
-  monitoring             = true
-  vpc_security_group_ids = [module.spoke_vpc_b_ssh_sg.security_group_id]
-  subnet_id              = module.spoke_vpc_b.public_subnets[0]
-  iam_instance_profile   = module.spoke_instance_iam_assumable_role.iam_instance_profile_id
+  ami           = data.aws_ami.amazon-linux-2.id
+  instance_type = "t2.micro"
+  monitoring    = true
+
+  vpc_security_group_ids = [
+    module.spoke_vpc_b_ssh_sg.security_group_id,
+    module.spoke_vpc_b_http_sg.security_group_id
+  ]
+
+  subnet_id            = module.spoke_vpc_b.public_subnets[0]
+  iam_instance_profile = module.spoke_instance_iam_assumable_role.iam_instance_profile_id
+  user_data            = <<-EOT
+  #!/bin/bash
+  echo "[INFO] installing nginx"
+  amazon-linux-extras install nginx1.12 -y
+  systemctl start nginx
+  systemctl enable nginx
+  EOT
 
   tags = {
     Terraform   = "true"

@@ -12,9 +12,19 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
       priority     = 1
       resource_arn = aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group.arn
     }
+
     stateful_rule_group_reference {
       resource_arn = aws_networkfirewall_rule_group.block_domains_fw_rule_group.arn
     }
+
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.block_public_dns_resolvers.arn
+    }
+
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.drop_non_http_between_vpcs.arn
+    }
+
   }
 
   tags = {
@@ -22,6 +32,10 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
   }
 }
 
+
+#--------------------------------------------------------------------------
+# Network Firewall Resource
+#--------------------------------------------------------------------------
 resource "aws_networkfirewall_firewall" "nfw" {
   name = "centralized-network-firewall"
 
@@ -47,8 +61,9 @@ resource "aws_networkfirewall_firewall" "nfw" {
 
 }
 
-
-# drop ALL ICMP Traffic
+#--------------------------------------------------------------------------
+#  Drop ALL ICMP Traffic Rule Group
+#--------------------------------------------------------------------------
 resource "aws_networkfirewall_rule_group" "drop_icmp_traffic_fw_rule_group" {
   name     = "drop-icmp-traffic-fw-rule-group"
   capacity = 100
@@ -78,7 +93,9 @@ resource "aws_networkfirewall_rule_group" "drop_icmp_traffic_fw_rule_group" {
 
 }
 
-# domain deny list
+#--------------------------------------------------------------------------
+#  Domain Deny list Rule Group
+#--------------------------------------------------------------------------
 resource "aws_networkfirewall_rule_group" "block_domains_fw_rule_group" {
   name     = "block-domains-fw-rule-group"
   capacity = 100
@@ -99,14 +116,78 @@ resource "aws_networkfirewall_rule_group" "block_domains_fw_rule_group" {
       rules_source_list {
         generated_rules_type = "DENYLIST"
         target_types         = ["HTTP_HOST", "TLS_SNI"]
-        targets              = [".facebook.com", ".twitter.com"]
+        targets = [
+          ".facebook.com",
+          ".twitter.com",
+          ".yahoo.com"
+        ]
       }
     }
   }
 
 }
 
-# Logging configuration
+#--------------------------------------------------------------------------
+#  Drop Non HTTP Traffic Rule Group
+#--------------------------------------------------------------------------
+resource "aws_networkfirewall_rule_group" "drop_non_http_between_vpcs" {
+  capacity = 100
+  name     = "drop-non-http-between-vpcs"
+  type     = "STATEFUL"
+  rule_group {
+    rule_variables {
+      ip_sets {
+        key = "SPOKE_VPCS"
+        ip_set {
+          definition = [
+            module.spoke_vpc_a.vpc_cidr_block,
+            module.spoke_vpc_b.vpc_cidr_block,
+
+          ]
+        }
+      }
+    }
+    rules_source {
+      rules_string = <<EOF
+      drop tcp $SPOKE_VPCS any <> $SPOKE_VPCS any (msg:"Blocked TCP that is not HTTP"; flow:established; app-layer-protocol:!http; sid:100; rev:1;)
+      drop ip $SPOKE_VPCS any <> $SPOKE_VPCS any (msg: "Block non-TCP traffic."; ip_proto:!TCP;sid:200; rev:1;)
+      EOF
+    }
+  }
+}
+
+#--------------------------------------------------------------------------
+#  Blog Public DNS Resolvers  Rule Group
+#--------------------------------------------------------------------------
+resource "aws_networkfirewall_rule_group" "block_public_dns_resolvers" {
+  capacity = 1
+  name     = "block-public-dns"
+  type     = "STATEFUL"
+  rule_group {
+    rules_source {
+      stateful_rule {
+        action = "DROP"
+        header {
+          destination      = "ANY"
+          destination_port = "ANY"
+          direction        = "ANY"
+          protocol         = "DNS"
+          source           = "ANY"
+          source_port      = "ANY"
+        }
+        rule_option {
+          keyword = "sid:50"
+        }
+      }
+    }
+  }
+}
+
+
+
+#--------------------------------------------------------------------------
+#  Network Firewall Logging configuration
+#--------------------------------------------------------------------------
 resource "aws_cloudwatch_log_group" "anfw_alert_log_group" {
   name = "/aws/network-firewall/alert"
 }
@@ -162,3 +243,4 @@ resource "aws_networkfirewall_logging_configuration" "anfw_alert_logging_configu
     }
   }
 }
+

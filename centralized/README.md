@@ -1,11 +1,19 @@
 # Centralized AWS Network Firewall Deployment Model
 
 ## Description
-Centralized AWS Network Firewall Deployment Demo Infrastrcutre.
+Centralized AWS Network Firewall Deployment Demo Infrastrcutre Using Terraform Community Open Source Models
+
+[AWS Centralized Network Firewall Architecture Documentation]
+(https://aws.amazon.com/blogs/networking-and-content-delivery/deployment-models-for-aws-network-firewall/)
 
 ## Setup
 This configuration has been tested in "ap-southeast-2" and "us-east-1" region
 
+```
+terraform init
+terraform plan
+terraform apply -auto-approve
+```
 
 
 #### Notes:
