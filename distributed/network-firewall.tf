@@ -27,7 +27,7 @@ resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
 }
 
 resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
-  name     = "icmp-alert-fw-rule-group" # "-${random_id.random_id.hex}"
+  name     = "icmp-alert-fw-rule-group"
   capacity = 100
   type     = "STATEFUL"
 
