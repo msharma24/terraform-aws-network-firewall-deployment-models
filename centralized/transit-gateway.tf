@@ -71,7 +71,7 @@ resource "aws_ec2_transit_gateway_route_table" "egress_rt_table" {
 resource "aws_ec2_transit_gateway_route" "inspection_vpc_route" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.egress_rt_table.id
   destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.inspection_vpc_attachment.id
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["inspection_vpc"]["id"]
   blackhole                      = false
 
 }
@@ -121,21 +121,24 @@ data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_b_attachment" {
 }
 
 resource "aws_ec2_transit_gateway_route" "spoke_vpc_b_tgw_route" {
-  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_attachment.id
+  transit_gateway_attachment_id = module.tgw.ec2_transit_gateway_vpc_attachment["spoke_vpc_b"]["id"]
+  # data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_attachment.id
   destination_cidr_block         = module.spoke_vpc_b.vpc_cidr_block
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
 
 }
 
 resource "aws_ec2_transit_gateway_route" "egress_vpc_attachment" {
-  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.egress_vpc_attachment.id
+  #transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.egress_vpc_attachment.id
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["egress_vpc"]["id"]
   destination_cidr_block         = "0.0.0.0/0"
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
 
 }
 
 resource "aws_ec2_transit_gateway_route" "spoke_vpc_a_tgw_route" {
-  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_a_attachment.id
+  #transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_a_attachment.id
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["spoke_vpc_a"]["id"]
   destination_cidr_block         = module.spoke_vpc_a.vpc_cidr_block
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
 
@@ -152,18 +155,10 @@ resource "aws_ec2_transit_gateway_route_table" "spoke_rt_table" {
 
 }
 
-data "aws_ec2_transit_gateway_vpc_attachment" "inspection_vpc_attachment" {
-  filter {
-    name   = "vpc-id"
-    values = [aws_vpc.inspection_vpc.id]
-  }
-}
-
-
 resource "aws_ec2_transit_gateway_route" "inspection_vpc_tgw_route" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_rt_table.id
   destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.inspection_vpc_attachment.id
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["inspection_vpc"]["id"]
 
 }
 
