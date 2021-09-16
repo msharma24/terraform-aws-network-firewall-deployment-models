@@ -3,6 +3,22 @@
 ## Description
 AWS Network Firewall is deployed into each individual VPC
 
+## Setup
+By default the reasources are deployed in `ap-southeast-2` region, if you wish
+to deploy the resources in another region please override the `region` variable
+either by creating a `tfvars` file or at command line `-var region=<Region-Id>`
+
+```
+terraform init
+terraform plan
+terraform apply
+```
+
+*Do Not* forget to destroy the resources when not needed.
+
+
+`terraform destroy`
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 

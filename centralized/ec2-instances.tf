@@ -5,7 +5,7 @@ module "spoke_vpc_a_ec2_instance" {
   name           = "${var.environment}/spoke_vpc_a_instance"
   instance_count = 1
 
-  ami                    = data.aws_ami.amazon-linux-2.id
+  ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t2.micro"
   monitoring             = true
   vpc_security_group_ids = [module.spoke_vpc_a_ssh_sg.security_group_id]
@@ -26,7 +26,7 @@ module "spoke_vpc_b_ec2_instance" {
   name           = "${var.environment}/spoke_vpc_b_instance"
   instance_count = 1
 
-  ami           = data.aws_ami.amazon-linux-2.id
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t2.micro"
   monitoring    = true
 

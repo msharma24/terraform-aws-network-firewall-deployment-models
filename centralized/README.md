@@ -32,13 +32,18 @@ and then you can test the firewall rules in action :-
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >=3.58.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >=2.3.0 |
+| <a name="requirement_template"></a> [template](#requirement\_template) | >=2.2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.56.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.58.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
 
 ## Modules
@@ -106,29 +111,20 @@ No requirements.
 | [aws_vpc.inspection_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
 | [random_id.random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [random_string.bucket_random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
-| [aws_ami.amazon-linux-2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
-| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_ec2_transit_gateway_vpc_attachment.egress_vpc_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ec2_transit_gateway_vpc_attachment) | data source |
-| [aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_a_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ec2_transit_gateway_vpc_attachment) | data source |
-| [aws_ec2_transit_gateway_vpc_attachment.spoke_vpc_b_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ec2_transit_gateway_vpc_attachment) | data source |
-| [aws_security_group.spoke_vpc_a_default_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/security_group) | data source |
-| [aws_security_group.spoke_vpc_b_default_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/security_group) | data source |
+| [aws_ami.amazon_linux_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_amazon_side_asn"></a> [amazon\_side\_asn](#input\_amazon\_side\_asn) | The Autonomous System Number (ASN) for the Amazon side of the gateway. By default the TGW is created with the current default Amazon ASN. | `string` | `"64512"` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | `"dev"` | no |
-| <a name="input_region"></a> [region](#input\_region) | AWS Deployment region | `any` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment name | `string` | `"dev"` | no |
+| <a name="input_region"></a> [region](#input\_region) | AWS Deployment region | `string` | `"ap-southeast-2"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_ec2_transit_gateway_vpc_attachment_ids"></a> [ec2\_transit\_gateway\_vpc\_attachment\_ids](#output\_ec2\_transit\_gateway\_vpc\_attachment\_ids) | List of EC2 Transit Gateway VPC Attachment identifiers |
-| <a name="output_iam_instance_profile_arn"></a> [iam\_instance\_profile\_arn](#output\_iam\_instance\_profile\_arn) | n/a |
-| <a name="output_spoke_vpc_a_ec2_instance_id"></a> [spoke\_vpc\_a\_ec2\_instance\_id](#output\_spoke\_vpc\_a\_ec2\_instance\_id) | n/a |
-| <a name="output_spoke_vpc_b_ec2_instance_id"></a> [spoke\_vpc\_b\_ec2\_instance\_id](#output\_spoke\_vpc\_b\_ec2\_instance\_id) | n/a |
+| <a name="output_spoke_vpc_a_ec2_instance_id"></a> [spoke\_vpc\_a\_ec2\_instance\_id](#output\_spoke\_vpc\_a\_ec2\_instance\_id) | spoke vpc a instance ID |
+| <a name="output_spoke_vpc_b_ec2_instance_id"></a> [spoke\_vpc\_b\_ec2\_instance\_id](#output\_spoke\_vpc\_b\_ec2\_instance\_id) | spoke vpc b instance ID |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

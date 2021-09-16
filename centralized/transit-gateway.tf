@@ -87,39 +87,6 @@ resource "aws_ec2_transit_gateway_route_table" "firewall_rt_table" {
 
 }
 
-data "aws_ec2_transit_gateway_vpc_attachment" "egress_vpc_attachment" {
-  filter {
-    name   = "vpc-id"
-    values = [module.egress_vpc.vpc_id]
-  }
-
-  depends_on = [
-    module.tgw
-  ]
-}
-
-data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_a_attachment" {
-  filter {
-    name   = "vpc-id"
-    values = [module.spoke_vpc_a.vpc_id]
-  }
-
-  depends_on = [
-    module.tgw
-  ]
-}
-
-data "aws_ec2_transit_gateway_vpc_attachment" "spoke_vpc_b_attachment" {
-  filter {
-    name   = "vpc-id"
-    values = [module.spoke_vpc_b.vpc_id]
-  }
-
-  depends_on = [
-    module.tgw
-  ]
-}
-
 resource "aws_ec2_transit_gateway_route" "spoke_vpc_b_tgw_route" {
   transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["spoke_vpc_b"]["id"]
   destination_cidr_block         = module.spoke_vpc_b.vpc_cidr_block
