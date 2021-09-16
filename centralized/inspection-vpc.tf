@@ -16,7 +16,7 @@ resource "aws_vpc" "inspection_vpc" {
 #---------------------------------------------------------------------------
 resource "aws_subnet" "inspection_vpc_firewall_subnet_a" {
   vpc_id            = aws_vpc.inspection_vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = "${var.region}a"
   cidr_block        = "100.64.32.0/19"
 
   tags = {
@@ -27,7 +27,7 @@ resource "aws_subnet" "inspection_vpc_firewall_subnet_a" {
 
 resource "aws_subnet" "inspection_vpc_firewall_subnet_b" {
   vpc_id            = aws_vpc.inspection_vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = "${var.region}b"
   cidr_block        = "100.64.64.0/19"
 
   tags = {
@@ -38,7 +38,7 @@ resource "aws_subnet" "inspection_vpc_firewall_subnet_b" {
 
 resource "aws_subnet" "inspection_vpc_firewall_subnet_c" {
   vpc_id            = aws_vpc.inspection_vpc.id
-  availability_zone = "ap-southeast-2c"
+  availability_zone = "${var.region}c"
   cidr_block        = "100.64.96.0/19"
 
   tags = {
@@ -52,7 +52,7 @@ resource "aws_subnet" "inspection_vpc_firewall_subnet_c" {
 #---------------------------------------------------------------------------
 resource "aws_subnet" "inspection_vpc_tgw_subnet_a" {
   vpc_id            = aws_vpc.inspection_vpc.id
-  availability_zone = "ap-southeast-2a"
+  availability_zone = "${var.region}a"
   cidr_block        = "100.64.128.0/19"
 
   tags = {
@@ -63,7 +63,7 @@ resource "aws_subnet" "inspection_vpc_tgw_subnet_a" {
 
 resource "aws_subnet" "inspection_vpc_tgw_subnet_b" {
   vpc_id            = aws_vpc.inspection_vpc.id
-  availability_zone = "ap-southeast-2b"
+  availability_zone = "${var.region}b"
   cidr_block        = "100.64.160.0/19"
 
   tags = {
@@ -74,7 +74,7 @@ resource "aws_subnet" "inspection_vpc_tgw_subnet_b" {
 
 resource "aws_subnet" "inspection_vpc_tgw_subnet_c" {
   vpc_id            = aws_vpc.inspection_vpc.id
-  availability_zone = "ap-southeast-2c"
+  availability_zone = "${var.region}c"
   cidr_block        = "100.64.192.0/19"
 
   tags = {

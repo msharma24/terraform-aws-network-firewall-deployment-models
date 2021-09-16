@@ -7,3 +7,7 @@ variable "amazon_side_asn" {
 variable "environment" {
   default = "dev"
 }
+
+variable "region" {
+  description = "AWS Deployment region"
+}

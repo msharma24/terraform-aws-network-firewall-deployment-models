@@ -1,3 +1,3 @@
 locals {
-  region = "ap-southeast-2"
+  region = var.region
 }

@@ -32,32 +32,18 @@ module "spoke_vpc_a" {
   vpc_tags = {
     Name = "spoke_vpc_a"
   }
-}
 
-
-data "aws_route_tables" "spoke_vpc_a_tgw_route" {
-  vpc_id = module.spoke_vpc_a.vpc_id
-
-  filter {
-    name   = "tag:Name"
-    values = ["spoke_vpc_a-public*"]
-  }
-
-  depends_on = [
-    module.spoke_vpc_a
-  ]
 }
 
 resource "aws_route" "spoke_vpc_a_tgw_route" {
-  count                  = length(data.aws_route_tables.spoke_vpc_a_tgw_route.ids)
-  route_table_id         = tolist(data.aws_route_tables.spoke_vpc_a_tgw_route.ids)[count.index]
+  count                  = length(module.spoke_vpc_a.public_route_table_ids)
+  route_table_id         = module.spoke_vpc_a.public_route_table_ids[count.index]
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = module.tgw.ec2_transit_gateway_id
 
   depends_on = [
     module.tgw,
     module.spoke_vpc_a,
-    data.aws_route_tables.spoke_vpc_a_tgw_route
   ]
 }
 
