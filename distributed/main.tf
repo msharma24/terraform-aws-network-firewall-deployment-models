@@ -309,10 +309,9 @@ resource "aws_route" "ingress_route_1" {
 resource "aws_route" "ingress_route_2" {
   route_table_id         = aws_route_table.ingress_route_table.id
   destination_cidr_block = "10.1.3.0/24"
-  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
 
 }
-
 
 #-----------------------------------------------------------------------------
 # NAT  Gateway
@@ -340,7 +339,6 @@ resource "aws_nat_gateway" "nat_gateway_1" {
   }
 }
 
-
 resource "aws_nat_gateway" "nat_gateway_2" {
   subnet_id     = aws_subnet.public_subnet_2.id
   allocation_id = aws_eip.nat_gateway_eip_2.id
@@ -349,7 +347,6 @@ resource "aws_nat_gateway" "nat_gateway_2" {
     Name = "nat_gateway_2"
   }
 }
-
 
 #-----------------------------------------------------------------------------
 #  AWS PrivateLink interface endpoint for services:
@@ -386,8 +383,6 @@ resource "aws_security_group" "endpoint_security_group" {
     }
   ]
 
-
-
   tags = {
     Name = "vpce-sg-1-${random_id.random_id.hex}"
   }
@@ -418,11 +413,122 @@ resource "aws_vpc_endpoint" "ec2messages_endpoint" {
   security_group_ids = [
     aws_security_group.endpoint_security_group.id
   ]
+
   subnet_ids = [
     aws_subnet.public_subnet_1.id,
-  aws_subnet.public_subnet_2.id]
+    aws_subnet.public_subnet_2.id
+  ]
 
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
 
 }
+#-----------------------------------------------------------------------------
+# Malicious VPC
+#-----------------------------------------------------------------------------
+resource "aws_vpc" "malicious_vpc" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "MaliciousVpc"
+  }
+
+}
+
+#-----------------------------------------------------------------------------
+# Internet Gateway
+#-----------------------------------------------------------------------------
+
+resource "aws_internet_gateway" "malicious_vpc_igw" {
+  vpc_id = aws_vpc.malicious_vpc.id
+
+  tags = {
+    Name = "MaliciousInternetGateway"
+  }
+
+}
+
+
+#-----------------------------------------------------------------------------
+# Subnet
+#-----------------------------------------------------------------------------
+resource "aws_subnet" "malicious_subnet" {
+  cidr_block              = "10.0.1.0/24"
+  vpc_id                  = aws_vpc.malicious_vpc.id
+  availability_zone       = data.aws_availability_zones.available.names[0]
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "MaliciousSubnet"
+  }
+
+}
+
+#-----------------------------------------------------------------------------
+# RT
+#-----------------------------------------------------------------------------
+resource "aws_route_table" "malicious_rt" {
+  vpc_id = aws_vpc.malicious_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.malicious_vpc_igw.id
+  }
+
+  depends_on = [
+    aws_internet_gateway.malicious_vpc_igw
+  ]
+
+  tags = {
+    Name = "MaliciousRouteTable"
+  }
+
+
+}
+
+resource "aws_route_table_association" "malicious_subnet_association" {
+  route_table_id = aws_route_table.malicious_rt.id
+  subnet_id      = aws_subnet.malicious_subnet.id
+
+}
+
+#----------------------------------------------------------------------------
+# NACL
+#----------------------------------------------------------------------------
+resource "aws_network_acl" "main" {
+  vpc_id     = aws_vpc.malicious_vpc.id
+  subnet_ids = [aws_subnet.malicious_subnet.id]
+
+  egress = [
+    {
+      protocol        = "tcp"
+      rule_no         = 100
+      action          = "allow"
+      from_port       = 0
+      to_port         = 65535
+      icmp_type       = 0
+      icmp_code       = 0
+      ipv6_cidr_block = ""
+      cidr_block      = "0.0.0.0/0"
+    }
+  ]
+
+  ingress = [
+    {
+      protocol        = "tcp"
+      rule_no         = 100
+      action          = "allow"
+      from_port       = 0
+      to_port         = 65535
+      icmp_type       = 0
+      icmp_code       = 0
+      ipv6_cidr_block = ""
+      cidr_block      = "0.0.0.0/0"
+    }
+  ]
+
+  tags = {
+    Name = "MaliciousPublicNACL"
+  }
+}
+

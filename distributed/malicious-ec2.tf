@@ -35,13 +35,9 @@ resource "aws_security_group" "malicious_instance_sg" {
     }
   ]
 
-
-
   tags = {
     Name = "MaliciousSecurityGroup"
   }
-
-
 
 }
 
@@ -60,19 +56,18 @@ resource "aws_eip" "malicious_instance_eip" {
 }
 
 data "template_file" "malicious_userdata" {
-  template = file("${path.cwd}/userdata-script/script.sh")
+  template = file("${path.cwd}/userdata-script/malicious_instance_script.sh")
 }
 
 resource "aws_instance" "malicious_instance" {
-  ami                    = data.aws_ami.amazon-linux-2.id
+  ami                    = data.aws_ami.amazon_linux_2.id
   subnet_id              = aws_subnet.malicious_subnet.id
-  instance_type          = "m5.large"
+  instance_type          = var.malicious_instance_type
   iam_instance_profile   = aws_iam_instance_profile.malicious_instance_iam_profile.id
   user_data              = data.template_file.malicious_userdata.rendered
   vpc_security_group_ids = [aws_security_group.malicious_instance_sg.id]
 
   tags = {
-
     Name = "MaliciousInstance-${random_id.random_id.hex}"
   }
 

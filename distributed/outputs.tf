@@ -4,7 +4,8 @@ output "firewall_vpc_id" {
 }
 
 output "malicious_vpc_id" {
-  value = aws_vpc.malicious_vpc.id
+  description = "Malicious VPC Id"
+  value       = aws_vpc.malicious_vpc.id
 }
 
 output "firewall_route_table_1" {
@@ -19,13 +20,10 @@ output "firewall_route_table_2" {
 
 }
 
-
-
 output "public_route_table_1" {
   description = "public Route Table 1"
   value       = aws_route_table.public_route_table_1.id
 }
-
 
 output "public_route_table_2" {
   description = "public Route Table 2"
@@ -33,12 +31,10 @@ output "public_route_table_2" {
 
 }
 
-
 output "private_route_table_1" {
   description = "private Route Table 1"
   value       = aws_route_table.private_route_table_1.id
 }
-
 
 output "private_route_table_2" {
   description = "private Route Table 2"
@@ -58,10 +54,11 @@ output "nat_gateway_2_id" {
 }
 
 output "az_1" {
-  value = data.aws_availability_zones.available.names[0]
+  description = "AZ 1"
+  value       = data.aws_availability_zones.available.names[0]
 }
 
-
 output "az_2" {
-  value = data.aws_availability_zones.available.names[1]
+  description = "AZ 2"
+  value       = data.aws_availability_zones.available.names[1]
 }

@@ -1,13 +1,11 @@
-variable "amazon_side_asn" {
-  description = "The Autonomous System Number (ASN) for the Amazon side of the gateway. By default the TGW is created with the current default Amazon ASN."
-  type        = string
-  default     = "64512"
-}
-
 variable "environment" {
-  default = "dev"
+  description = "Deployment environment name"
+  type        = string
+  default     = "dev"
 }
 
 variable "region" {
   description = "AWS Deployment region"
+  type        = string
+  default     = "ap-southeast-2"
 }
