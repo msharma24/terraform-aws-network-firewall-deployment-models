@@ -1,8 +1,8 @@
 # Distributed AWS Network Firewall deployment model
 
 ## Description
-Terraform resources in this directory deploys the following architecure
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+Terraform resources in this directory deploys the following architecture
+![distributed anfw](https://github.com/msharma24/terraform-aws-network-firewall-deployment-models/blob/main/distributed/images/distributed-anfw.png)
 
 AWS Network Firewall is deployed in a dedicated Firewall subnet which has access to Internet Gateway (IGW). Returning traffic from Internet Gateway is returned back to Network Firewalls Elastic Network Interface (ENI) using Ingress Routing table that as Edge association to the IGW.
 This ensures the traffic is symmetric for full inspection. NAT Gateway deployed in dedicated public subnet allows instances in private subnet to communicated with resources on the Internet.
