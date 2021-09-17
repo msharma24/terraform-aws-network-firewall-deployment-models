@@ -263,7 +263,7 @@ resource "aws_route_table_association" "private_subnet_rt_association_2" {
 resource "aws_route" "private_subnet_1_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.private_route_table_1.id
-  gateway_id             = aws_nat_gateway.nat_gateway_1.id
+  nat_gateway_id         = aws_nat_gateway.nat_gateway_1.id
 
   depends_on = [
     aws_nat_gateway.nat_gateway_1
@@ -273,7 +273,7 @@ resource "aws_route" "private_subnet_1_route" {
 resource "aws_route" "private_subnet_2_route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.private_route_table_2.id
-  gateway_id             = aws_nat_gateway.nat_gateway_2.id
+  nat_gateway_id         = aws_nat_gateway.nat_gateway_2.id
 
   depends_on = [
     aws_nat_gateway.nat_gateway_2
@@ -423,112 +423,3 @@ resource "aws_vpc_endpoint" "ec2messages_endpoint" {
   private_dns_enabled = true
 
 }
-#-----------------------------------------------------------------------------
-# Malicious VPC
-#-----------------------------------------------------------------------------
-resource "aws_vpc" "malicious_vpc" {
-  cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
-
-  tags = {
-    Name = "MaliciousVpc"
-  }
-
-}
-
-#-----------------------------------------------------------------------------
-# Internet Gateway
-#-----------------------------------------------------------------------------
-
-resource "aws_internet_gateway" "malicious_vpc_igw" {
-  vpc_id = aws_vpc.malicious_vpc.id
-
-  tags = {
-    Name = "MaliciousInternetGateway"
-  }
-
-}
-
-
-#-----------------------------------------------------------------------------
-# Subnet
-#-----------------------------------------------------------------------------
-resource "aws_subnet" "malicious_subnet" {
-  cidr_block              = "10.0.1.0/24"
-  vpc_id                  = aws_vpc.malicious_vpc.id
-  availability_zone       = data.aws_availability_zones.available.names[0]
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "MaliciousSubnet"
-  }
-
-}
-
-#-----------------------------------------------------------------------------
-# RT
-#-----------------------------------------------------------------------------
-resource "aws_route_table" "malicious_rt" {
-  vpc_id = aws_vpc.malicious_vpc.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.malicious_vpc_igw.id
-  }
-
-  depends_on = [
-    aws_internet_gateway.malicious_vpc_igw
-  ]
-
-  tags = {
-    Name = "MaliciousRouteTable"
-  }
-
-
-}
-
-resource "aws_route_table_association" "malicious_subnet_association" {
-  route_table_id = aws_route_table.malicious_rt.id
-  subnet_id      = aws_subnet.malicious_subnet.id
-
-}
-
-#----------------------------------------------------------------------------
-# NACL
-#----------------------------------------------------------------------------
-resource "aws_network_acl" "main" {
-  vpc_id     = aws_vpc.malicious_vpc.id
-  subnet_ids = [aws_subnet.malicious_subnet.id]
-
-  egress = [
-    {
-      protocol        = "tcp"
-      rule_no         = 100
-      action          = "allow"
-      from_port       = 0
-      to_port         = 65535
-      icmp_type       = 0
-      icmp_code       = 0
-      ipv6_cidr_block = ""
-      cidr_block      = "0.0.0.0/0"
-    }
-  ]
-
-  ingress = [
-    {
-      protocol        = "tcp"
-      rule_no         = 100
-      action          = "allow"
-      from_port       = 0
-      to_port         = 65535
-      icmp_type       = 0
-      icmp_code       = 0
-      ipv6_cidr_block = ""
-      cidr_block      = "0.0.0.0/0"
-    }
-  ]
-
-  tags = {
-    Name = "MaliciousPublicNACL"
-  }
-}
-
