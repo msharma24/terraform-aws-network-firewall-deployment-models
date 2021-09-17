@@ -1,3 +1,28 @@
+#---------------------------------------------------------
+# Network Firewall Resources
+#---------------------------------------------------------
+resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
+  name = "firewall-policy"
+
+  firewall_policy {
+    stateless_default_actions          = ["aws:forward_to_sfe"]
+    stateless_fragment_default_actions = ["aws:forward_to_sfe"]
+
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.icmp_alert_fw_rule_group.arn
+    }
+
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.domain_allow_fw_rule_group.arn
+    }
+
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
   name     = "domain-allow-fw-rule-group"
   capacity = 100
@@ -17,7 +42,10 @@ resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
       rules_source_list {
         generated_rules_type = "ALLOWLIST"
         target_types         = ["HTTP_HOST", "TLS_SNI"]
-        targets              = [".amazon.com", ".amazonaws.com"]
+        targets = [
+          ".amazon.com",
+          ".amazonaws.com"
+        ]
       }
     }
 
@@ -52,30 +80,9 @@ resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
   }
 }
 
-
-resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
-  name = "firewall-policy"
-
-  firewall_policy {
-    stateless_default_actions          = ["aws:forward_to_sfe"]
-    stateless_fragment_default_actions = ["aws:forward_to_sfe"]
-
-    stateful_rule_group_reference {
-      resource_arn = aws_networkfirewall_rule_group.icmp_alert_fw_rule_group.arn
-    }
-
-    stateful_rule_group_reference {
-      resource_arn = aws_networkfirewall_rule_group.domain_allow_fw_rule_group.arn
-    }
-
-
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
+#---------------------------------------------------------
+# Logging Configuration
+#---------------------------------------------------------
 resource "aws_networkfirewall_firewall" "anfw" {
   name        = "NetworkFirewall"
   description = "AWS NetworkFirewall Service Distributed model demo"
