@@ -2,6 +2,10 @@
 
 ## Description
 Terraform resources in this directory deploys the following architecure
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+
+AWS Network Firewall is deployed in a dedicated Firewall subnet which has access to Internet Gateway (IGW). Returning traffic from Internet Gateway is returned back to Network Firewalls Elastic Network Interface (ENI) using Ingress Routing table that as Edge association to the IGW.
+This ensures the traffic is symmetric for full inspection. NAT Gateway deployed in dedicated public subnet allows instances in private subnet to communicated with resources on the Internet.
 
 ## Setup
 By default the resources are deployed in `ap-southeast-2` region, if you wish
