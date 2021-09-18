@@ -388,6 +388,24 @@ resource "aws_security_group" "endpoint_security_group" {
   }
 
 }
+resource "aws_vpc_endpoint" "ssmmessages_endpoint" {
+  vpc_id = aws_vpc.vpc.id
+
+  service_name = "com.amazonaws.${var.region}.ssmmessages"
+
+  security_group_ids = [
+    aws_security_group.endpoint_security_group.id
+  ]
+
+  subnet_ids = [
+    aws_subnet.public_subnet_1.id,
+    aws_subnet.public_subnet_2.id
+  ]
+
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+}
 
 resource "aws_vpc_endpoint" "ssm_endpoint" {
   vpc_id       = aws_vpc.vpc.id
