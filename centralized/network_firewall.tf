@@ -25,6 +25,10 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
       resource_arn = aws_networkfirewall_rule_group.drop_non_http_between_vpcs.arn
     }
 
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.et_open_rulselt_fw_rule_group.arn
+    }
+
   }
 
   tags = {
@@ -154,6 +158,22 @@ resource "aws_networkfirewall_rule_group" "drop_non_http_between_vpcs" {
       EOF
     }
   }
+}
+
+#--------------------------------------------------------------------------
+#  Emerging Threat Rule Group
+#--------------------------------------------------------------------------
+resource "aws_networkfirewall_rule_group" "et_open_rulselt_fw_rule_group" {
+  name        = "et-open-rulselt-fw-rule-group"
+  description = "Stateful Inspection from rules specifications defined in Suricata flat format"
+  capacity    = 250
+  type        = "STATEFUL"
+  rules       = file("./rules/emerging-user-agents.rules")
+
+  tags = {
+    Name = "et-open-rulselt-fw-rule-group"
+  }
+
 }
 
 #--------------------------------------------------------------------------
