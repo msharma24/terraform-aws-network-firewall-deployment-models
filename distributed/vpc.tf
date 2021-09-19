@@ -388,6 +388,24 @@ resource "aws_security_group" "endpoint_security_group" {
   }
 
 }
+resource "aws_vpc_endpoint" "ssmmessages_endpoint" {
+  vpc_id = aws_vpc.vpc.id
+
+  service_name = "com.amazonaws.${var.region}.ssmmessages"
+
+  security_group_ids = [
+    aws_security_group.endpoint_security_group.id
+  ]
+
+  subnet_ids = [
+    aws_subnet.public_subnet_1.id,
+    aws_subnet.public_subnet_2.id
+  ]
+
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+}
 
 resource "aws_vpc_endpoint" "ssm_endpoint" {
   vpc_id       = aws_vpc.vpc.id
@@ -421,5 +439,45 @@ resource "aws_vpc_endpoint" "ec2messages_endpoint" {
 
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
+
+}
+
+data "aws_vpc_endpoint_service" "s3_endpoint" {
+  service      = "s3"
+  service_type = "Gateway"
+
+}
+
+resource "aws_vpc_endpoint" "s3_gateway_endpoint" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = data.aws_vpc_endpoint_service.s3_endpoint.service_name
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Principal" : "*",
+        "Action" : [
+          "s3:GetObject"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:s3:::amazonlinux.${var.region}.amazonaws.com/*",
+          "arn:aws:s3:::amazonlinux-2-repos-${var.region}/*"
+        ]
+      }
+    ]
+  })
+
+}
+
+resource "aws_vpc_endpoint_route_table_association" "private_subnet_endpoint_rt_association_1" {
+  vpc_endpoint_id = aws_vpc_endpoint.s3_gateway_endpoint.id
+  route_table_id  = aws_route_table.private_route_table_1.id
+
+}
+
+
+resource "aws_vpc_endpoint_route_table_association" "private_subnet_endpoint_rt_association_2" {
+  vpc_endpoint_id = aws_vpc_endpoint.s3_gateway_endpoint.id
+  route_table_id  = aws_route_table.private_route_table_2.id
 
 }
