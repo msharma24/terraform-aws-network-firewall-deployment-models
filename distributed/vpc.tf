@@ -441,3 +441,43 @@ resource "aws_vpc_endpoint" "ec2messages_endpoint" {
   private_dns_enabled = true
 
 }
+
+data "aws_vpc_endpoint_service" "s3_endpoint" {
+  service      = "s3"
+  service_type = "Gateway"
+
+}
+
+resource "aws_vpc_endpoint" "s3_gateway_endpoint" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = data.aws_vpc_endpoint_service.s3_endpoint.service_name
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Principal" : "*",
+        "Action" : [
+          "s3:GetObject"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:s3:::amazonlinux.region.amazonaws.com/*",
+          "arn:aws:s3:::amazonlinux-2-repos-region/*"
+        ]
+      }
+    ]
+  })
+
+}
+
+resource "aws_vpc_endpoint_route_table_association" "private_subnet_endpoint_rt_association_1" {
+  vpc_endpoint_id = aws_vpc_endpoint.s3_gateway_endpoint.id
+  route_table_id  = aws_route_table.private_route_table_1.id
+
+}
+
+
+resource "aws_vpc_endpoint_route_table_association" "private_subnet_endpoint_rt_association_2" {
+  vpc_endpoint_id = aws_vpc_endpoint.s3_gateway_endpoint.id
+  route_table_id  = aws_route_table.private_route_table_2.id
+
+}
