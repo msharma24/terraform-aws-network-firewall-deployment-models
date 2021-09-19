@@ -26,7 +26,7 @@ Once the Terraform apply completes :
 region where you have deployed the resources and go to **AWS Systems Manager >
 Session Manager >> Click Start Session and login to one of the test_instance** and then run the following test cases to validate the AWS Network Firewall Rule Groups in effect.
 
-- `curl -v amazon.com --max-time 4` - *this should work*
+1 - `curl -v amazon.com --max-time 4` - *this should work*
 
 ```
 sh-4.2$ curl -m 4 amazon.com
@@ -38,14 +38,14 @@ sh-4.2$ curl -m 4 amazon.com
 </body>
 </html>
 ```
-- `curl -v google.com --max-time 4` or any other domain - this should *not* work.
+2 - `curl -v google.com --max-time 4` or any other domain - this should *not* work.
 
 
 ```
 sh-4.2$ curl -m 4 google.com
 curl: (28) Operation timed out after 4001 milliseconds with 0 bytes received
 ```
-- ping any public dns `ping 8.8.8.8 -c 4` - this will create an alert in the Cloudwatch logs group - **"/nfw-demo-dev/anfw/alert"**
+3 -  ping any public dns `ping 8.8.8.8 -c 4` - this will create an alert in the Cloudwatch logs group - **"/nfw-demo-dev/anfw/alert"**
 
 ```
 {
