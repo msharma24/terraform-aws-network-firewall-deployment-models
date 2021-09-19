@@ -3,7 +3,7 @@ module "tgw" {
   version = "~> 2.0"
 
   name        = "centralized-firewall-transit-gateway"
-  description = "My TGW shared with several other AWS accounts"
+  description = "My TGW description"
 
   enable_auto_accept_shared_attachments  = true
   enable_default_route_table_association = false
