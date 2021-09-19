@@ -7,7 +7,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "spoke-vpc-a-nfw-demo-dev"
+    Name = "vpc-nfw-demo-dev"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "spoke-vpc-a-igwnfw-demo-dev"
+    Name = "vpc-igw-nfw-demo-dev"
   }
 
 }

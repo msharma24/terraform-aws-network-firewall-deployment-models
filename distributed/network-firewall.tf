@@ -24,9 +24,10 @@ resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
 }
 
 resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
-  name     = "domain-allow-fw-rule-group"
-  capacity = 100
-  type     = "STATEFUL"
+  name        = "domain-allow-fw-rule-group"
+  description = "Domain Allow FW Rule Group"
+  capacity    = 100
+  type        = "STATEFUL"
 
   rule_group {
     rule_variables {
@@ -55,9 +56,10 @@ resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
 }
 
 resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
-  name     = "icmp-alert-fw-rule-group"
-  capacity = 100
-  type     = "STATEFUL"
+  name        = "icmp-alert-fw-rule-group"
+  description = "ICMP Alert Rule Group"
+  capacity    = 100
+  type        = "STATEFUL"
 
   rule_group {
     rules_source {
@@ -133,7 +135,7 @@ resource "aws_networkfirewall_logging_configuration" "anfw_alert_log_config" {
     }
     log_destination_config {
       log_destination = {
-        logGroup = aws_cloudwatch_log_group.anfw_alert_log_group.name
+        logGroup = aws_cloudwatch_log_group.anfw_flow_log_group.name
       }
       log_destination_type = "CloudWatchLogs"
       log_type             = "FLOW"
