@@ -460,8 +460,8 @@ resource "aws_vpc_endpoint" "s3_gateway_endpoint" {
         ],
         "Effect" : "Allow",
         "Resource" : [
-          "arn:aws:s3:::amazonlinux.region.amazonaws.com/*",
-          "arn:aws:s3:::amazonlinux-2-repos-region/*"
+          "arn:aws:s3:::amazonlinux.${var.region}.amazonaws.com/*",
+          "arn:aws:s3:::amazonlinux-2-repos-${var.region}/*"
         ]
       }
     ]
