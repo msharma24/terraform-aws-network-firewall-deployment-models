@@ -51,11 +51,6 @@ resource "aws_route" "spoke_vpc_a_tgw_route" {
 ################################################################################
 # VPC Module Spoke VPC A - SSM Endpoint
 ################################################################################
-# data "aws_security_group" "spoke_vpc_a_default_sg" {
-#   name   = "default"
-#   vpc_id = module.spoke_vpc_a.vpc_id
-# }
-
 module "spoke_vpc_a_ssm_endpoint" {
 
   source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
