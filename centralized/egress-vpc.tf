@@ -8,13 +8,17 @@ module "egress_vpc" {
   cidr    = "10.10.0.0/16"
 
   azs             = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  private_subnets = ["10.10.0.0/28", "10.10.0.16/28"]
-  public_subnets  = ["10.10.2.0/24", "10.10.1.0/24"]
+  private_subnets = ["10.10.0.0/28", "10.10.0.16/28", "10.10.3.0/28"]
+  public_subnets  = ["10.10.2.0/24", "10.10.1.0/24", "10.10.4.0/24"]
 
   enable_ipv6 = false
 
   enable_nat_gateway = true
   single_nat_gateway = false
+
+  private_subnet_tags = {
+    Name = "egress-vpc-tgw-subnet"
+  }
 
 
   tags = {
