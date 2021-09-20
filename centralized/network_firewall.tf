@@ -260,10 +260,8 @@ resource "aws_networkfirewall_logging_configuration" "anfw_alert_logging_configu
     }
     log_destination_config {
       log_destination = {
-        #bucketName = aws_s3_bucket.anfw_flow_bucket.bucket
         logGroup = aws_cloudwatch_log_group.anfw_flow_log_group.name
       }
-      #log_destination_type = "S3"
       log_destination_type = "CloudWatchLogs"
       log_type             = "FLOW"
     }
