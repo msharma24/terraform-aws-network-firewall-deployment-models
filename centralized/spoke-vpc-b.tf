@@ -12,8 +12,9 @@ module "spoke_vpc_b" {
   private_subnets = ["10.102.1.0/24", "10.102.2.0/24", "10.102.3.0/24"]
   public_subnets  = ["10.102.4.0/24", "10.102.5.0/24", "10.102.6.0/24"]
 
-  enable_ipv6 = false
-  create_igw  = false
+  enable_ipv6             = false
+  create_igw              = false
+  map_public_ip_on_launch = false
 
   enable_nat_gateway = false
   single_nat_gateway = false
@@ -28,6 +29,14 @@ module "spoke_vpc_b" {
 
   vpc_tags = {
     Name = "spoke_vpc_b"
+  }
+  private_subnet_tags = {
+
+    Name = "spoke-vpc-b-tgw-subnet"
+  }
+  public_subnet_tags = {
+
+    Name = "spoke-vpc-b-workload-subnet"
   }
 }
 

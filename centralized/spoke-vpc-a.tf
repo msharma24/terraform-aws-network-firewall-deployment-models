@@ -15,8 +15,9 @@ module "spoke_vpc_a" {
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
-  enable_ipv6 = false
-  create_igw  = false
+  enable_ipv6             = false
+  create_igw              = false
+  map_public_ip_on_launch = false
 
   enable_nat_gateway   = false
   single_nat_gateway   = false
@@ -33,8 +34,15 @@ module "spoke_vpc_a" {
     Name = "spoke_vpc_a"
   }
 
-}
+  private_subnet_tags = {
 
+    Name = "spoke-vpc-a-tgw-subnet"
+  }
+  public_subnet_tags = {
+
+    Name = "spoke-vpc-a-workload-subnet"
+  }
+}
 resource "aws_route" "spoke_vpc_a_tgw_route" {
   count                  = length(module.spoke_vpc_a.public_route_table_ids)
   route_table_id         = module.spoke_vpc_a.public_route_table_ids[count.index]

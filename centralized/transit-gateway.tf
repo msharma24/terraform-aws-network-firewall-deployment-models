@@ -31,9 +31,13 @@ module "tgw" {
       vpc_id                 = aws_vpc.inspection_vpc.id
       appliance_mode_support = true
       subnet_ids = [
-        aws_subnet.inspection_vpc_firewall_subnet_a.id,
-        aws_subnet.inspection_vpc_firewall_subnet_b.id,
-        aws_subnet.inspection_vpc_firewall_subnet_c.id,
+        # aws_subnet.inspection_vpc_firewall_subnet_a.id,
+        # aws_subnet.inspection_vpc_firewall_subnet_b.id,
+        # aws_subnet.inspection_vpc_firewall_subnet_c.id,
+        aws_subnet.inspection_vpc_tgw_subnet_a.id,
+        aws_subnet.inspection_vpc_tgw_subnet_b.id,
+        aws_subnet.inspection_vpc_tgw_subnet_c.id,
+
       ]
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = true
