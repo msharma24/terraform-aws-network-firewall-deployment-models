@@ -90,8 +90,7 @@ resource "aws_route_table" "inspection_vpc_firewall_rt_1" {
   vpc_id = aws_vpc.inspection_vpc.id
 
   route {
-    cidr_block = "0.0.0.0/0"
-    #vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
+    cidr_block         = "0.0.0.0/0"
     transit_gateway_id = module.tgw.ec2_transit_gateway_id
   }
 
@@ -109,8 +108,7 @@ resource "aws_route_table" "inspection_vpc_firewall_rt_2" {
   vpc_id = aws_vpc.inspection_vpc.id
 
   route {
-    cidr_block = "0.0.0.0/0"
-    #vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
+    cidr_block         = "0.0.0.0/0"
     transit_gateway_id = module.tgw.ec2_transit_gateway_id
   }
 
@@ -127,8 +125,7 @@ resource "aws_route_table" "inspection_vpc_firewall_rt_2" {
 resource "aws_route_table" "inspection_vpc_firewall_rt_3" {
   vpc_id = aws_vpc.inspection_vpc.id
   route {
-    cidr_block = "0.0.0.0/0"
-    #vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[2]
+    cidr_block         = "0.0.0.0/0"
     transit_gateway_id = module.tgw.ec2_transit_gateway_id
   }
 
@@ -168,8 +165,7 @@ resource "aws_route_table" "inspection_vpc_tgw_rt_1" {
   vpc_id = aws_vpc.inspection_vpc.id
 
   route {
-    cidr_block = "0.0.0.0/0"
-    # transit_gateway_id = module.tgw.ec2_transit_gateway_id
+    cidr_block      = "0.0.0.0/0"
     vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
   }
 
@@ -188,8 +184,7 @@ resource "aws_route_table" "inspection_vpc_tgw_rt_2" {
   vpc_id = aws_vpc.inspection_vpc.id
 
   route {
-    cidr_block = "0.0.0.0/0"
-    #transit_gateway_id = module.tgw.ec2_transit_gateway_id
+    cidr_block      = "0.0.0.0/0"
     vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
   }
 
@@ -208,8 +203,7 @@ resource "aws_route_table" "inspection_vpc_tgw_rt_3" {
   vpc_id = aws_vpc.inspection_vpc.id
 
   route {
-    cidr_block = "0.0.0.0/0"
-    #transit_gateway_id = module.tgw.ec2_transit_gateway_id
+    cidr_block      = "0.0.0.0/0"
     vpc_endpoint_id = (aws_networkfirewall_firewall.nfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[2]
   }
 
