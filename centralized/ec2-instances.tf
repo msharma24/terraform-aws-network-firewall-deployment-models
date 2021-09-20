@@ -41,7 +41,7 @@ module "spoke_vpc_b_ec2_instance" {
     module.spoke_vpc_b_http_sg.security_group_id
   ]
 
-  subnet_id            = module.spoke_vpc_b.public_subnets[0]
+  subnet_id            = module.spoke_vpc_b.public_subnets[1]
   iam_instance_profile = module.spoke_instance_iam_assumable_role.iam_instance_profile_id
   user_data            = <<-EOT
   #!/bin/bash

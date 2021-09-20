@@ -27,9 +27,22 @@ Log in to the AWS Console after deploying the Terraform Configuration and go ta 
 4 -  try a ping to a public IP address: this shouldn't work `ping 8.8.8.8`
 
 5 - try to `dig` using a public DNS resolver: this shouldn't work `dig google.com`
-6 - try to curl any other public URL: this should work
+
+6 - try to curl any other public URL: this should work 
 
 #### Testing Emerging Threat Suricata Open Ruleset
+The user data script of the EC2 instances in installing `nc` so that we can sample test the Emerging Threat Open Ruleset using a simple command line utility created by [testmynids.org](https://github.com/3CORESec/testmynids.org) - A website and framework for testing NIDS detection.
+
+
+Login to one of the EC2 instances via SSM Session Manager and run the following `curl` command to execute sample 
+
+`curl -sSL https://raw.githubusercontent.com/3CORESec/testmynids.org/master/tmNIDS -o /tmp/tmNIDS && chmod +x /tmp/tmNIDS && /tmp/tmNIDS -99
+`
+
+This command will run the following [tests](https://github.com/3CORESec/testmynids.org#included-tests)
+
+Once the command execution completes, go back to the AWS Console and access Cloud-watch Log group 
+
 
 #### Notes:
 [Appliance Mode Enabled on the Firewall Inspection VPC](https://aws.amazon.com/blogs/networking-and-content-delivery/centralized-inspection-architecture-with-aws-gateway-load-balancer-and-aws-transit-gateway/)
