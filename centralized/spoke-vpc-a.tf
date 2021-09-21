@@ -43,6 +43,8 @@ module "spoke_vpc_a" {
     Name = "spoke-vpc-a-workload-subnet"
   }
 }
+
+
 resource "aws_route" "spoke_vpc_a_tgw_route" {
   count                  = length(module.spoke_vpc_a.public_route_table_ids)
   route_table_id         = module.spoke_vpc_a.public_route_table_ids[count.index]
@@ -54,7 +56,6 @@ resource "aws_route" "spoke_vpc_a_tgw_route" {
     module.spoke_vpc_a,
   ]
 }
-
 
 ################################################################################
 # VPC Module Spoke VPC A - SSM Endpoint

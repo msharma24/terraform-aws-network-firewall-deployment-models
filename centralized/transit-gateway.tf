@@ -1,3 +1,6 @@
+#------------------------------------------------------------------------
+# Transit Gateway  Resources
+#------------------------------------------------------------------------
 module "tgw" {
   source  = "terraform-aws-modules/transit-gateway/aws"
   version = "~> 2.0"

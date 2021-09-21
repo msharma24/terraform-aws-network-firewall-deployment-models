@@ -30,6 +30,9 @@ module "inspection_vpc" {
 
 }
 
+#---------------------------------------------------------------------------
+# Inspection VPC Firewall Endpoint and TGW Route
+#---------------------------------------------------------------------------
 resource "aws_route" "inspection_vpc_tgw_rt_route" {
   count                  = length(module.inspection_vpc.private_route_table_ids)
   route_table_id         = element(module.inspection_vpc.private_route_table_ids, count.index)
