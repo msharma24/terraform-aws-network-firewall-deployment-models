@@ -70,6 +70,7 @@ Once the command execution completes, go back to the AWS Console and access Clou
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_egress_vpc"></a> [egress\_vpc](#module\_egress\_vpc) | terraform-aws-modules/vpc/aws | 3.0.0 |
+| <a name="module_inspection_vpc"></a> [inspection\_vpc](#module\_inspection\_vpc) | terraform-aws-modules/vpc/aws | 3.0.0 |
 | <a name="module_spoke_instance_iam_assumable_role"></a> [spoke\_instance\_iam\_assumable\_role](#module\_spoke\_instance\_iam\_assumable\_role) | terraform-aws-modules/iam/aws//modules/iam-assumable-role | ~> 4.5 |
 | <a name="module_spoke_vpc_a"></a> [spoke\_vpc\_a](#module\_spoke\_vpc\_a) | terraform-aws-modules/vpc/aws | 3.0.0 |
 | <a name="module_spoke_vpc_a_ec2_instance"></a> [spoke\_vpc\_a\_ec2\_instance](#module\_spoke\_vpc\_a\_ec2\_instance) | terraform-aws-modules/ec2-instance/aws | ~> 2.0 |
@@ -107,29 +108,12 @@ Once the command execution completes, go back to the AWS Console and access Clou
 | [aws_networkfirewall_rule_group.drop_non_http_between_vpcs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_networkfirewall_rule_group.et_open_rulselt_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_route.egress_vpc_route_to_tgw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
+| [aws_route.inspection_vpc_firewall_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
+| [aws_route.inspection_vpc_tgw_rt_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.spoke_vpc_a_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.spoke_vpc_b_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
-| [aws_route_table.inspection_vpc_firewall_rt_1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
-| [aws_route_table.inspection_vpc_firewall_rt_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
-| [aws_route_table.inspection_vpc_firewall_rt_3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
-| [aws_route_table.inspection_vpc_tgw_rt_1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
-| [aws_route_table.inspection_vpc_tgw_rt_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
-| [aws_route_table.inspection_vpc_tgw_rt_3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
-| [aws_route_table_association.firewall_subnet_association_a](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
-| [aws_route_table_association.firewall_subnet_association_b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
-| [aws_route_table_association.firewall_subnet_association_c](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
-| [aws_route_table_association.tgw_subnet_association_a](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
-| [aws_route_table_association.tgw_subnet_association_b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
-| [aws_route_table_association.tgw_subnet_association_c](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
 | [aws_s3_bucket.anfw_flow_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_public_access_block.anfw_flow_bucket_public_access_block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_subnet.inspection_vpc_firewall_subnet_a](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
-| [aws_subnet.inspection_vpc_firewall_subnet_b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
-| [aws_subnet.inspection_vpc_firewall_subnet_c](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
-| [aws_subnet.inspection_vpc_tgw_subnet_a](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
-| [aws_subnet.inspection_vpc_tgw_subnet_b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
-| [aws_subnet.inspection_vpc_tgw_subnet_c](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
-| [aws_vpc.inspection_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
 | [random_id.random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [random_string.bucket_random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [aws_ami.amazon_linux_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
