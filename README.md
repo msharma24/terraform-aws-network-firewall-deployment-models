@@ -1,4 +1,4 @@
-# AWS Network Firewall  Deployment models using Terraform
+# AWS Network Firewall  Deployment models with Terraform
 
 # Info
 This project contains Terraform resources to deploy
@@ -20,7 +20,7 @@ to any other VPC or AWS Transit Gateway. Each AWS Network Firewall can have its
 own firewall policy or share a policy through common rule groups
 (reusable collections of rules) across multiple firewalls.
 
-### 2. Centralised
+### 2. Centralized
 
 For centralized deployment model, AWS Transit Gateway is a prerequisite. AWS Transit Gateway acts as a network hub and simplifies the connectivity between VPCs as well as on-premises networks. AWS Transit Gateway also provides inter-region peering capabilities to other Transit Gateways to establish a global network using AWS backbone.
 

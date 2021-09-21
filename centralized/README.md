@@ -133,3 +133,4 @@ Once the command execution completes, go back to the AWS Console and access Clou
 | <a name="output_spoke_vpc_a_ec2_instance_id"></a> [spoke\_vpc\_a\_ec2\_instance\_id](#output\_spoke\_vpc\_a\_ec2\_instance\_id) | spoke vpc a instance ID |
 | <a name="output_spoke_vpc_b_ec2_instance_id"></a> [spoke\_vpc\_b\_ec2\_instance\_id](#output\_spoke\_vpc\_b\_ec2\_instance\_id) | spoke vpc b instance ID |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+c

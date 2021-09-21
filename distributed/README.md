@@ -20,7 +20,7 @@ terraform plan
 terraform apply
 ```
 
-### Tests
+### Testing Firewall Rules
 Once the Terraform apply completes : 
  Login to the AWS Console and select the AWS
 region where you have deployed the resources and go to **AWS Systems Manager >
