@@ -206,11 +206,13 @@ resource "aws_networkfirewall_rule_group" "block_public_dns_resolvers" {
 #  Network Firewall Logging configuration
 #--------------------------------------------------------------------------
 resource "aws_cloudwatch_log_group" "anfw_alert_log_group" {
-  name = "/aws/network-firewall/alert"
+  name              = "/aws/network-firewall/alert"
+  retention_in_days = 60
 }
 
 resource "aws_cloudwatch_log_group" "anfw_flow_log_group" {
-  name = "/aws/network-firewall/flow"
+  name              = "/aws/network-firewall/flow"
+  retention_in_days = 60
 }
 
 resource "random_string" "bucket_random_id" {
