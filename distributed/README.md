@@ -12,7 +12,7 @@ By default the resources are deployed in `ap-southeast-2` region, if you wish
 to deploy the resources in another region please override the `region` variable
 either by creating a `tfvars` file or at command line `-var region=<Region-Id>`
 
-Run the following commands to build the infrastructure	
+Run the following commands to build the infrastructure
 
 ```
 terraform init
@@ -21,10 +21,12 @@ terraform apply
 ```
 
 ### Testing Firewall Rules
-Once the Terraform apply completes : 
+Once the Terraform apply completes :
  Login to the AWS Console and select the AWS
 region where you have deployed the resources and go to **AWS Systems Manager >
-Session Manager >> Click Start Session and login to one of the test_instance** and then run the following test cases to validate the AWS Network Firewall Rule Groups in effect.
+Session Manager >> Click Start Session and login to one of the test_instance**
+and then run the following test cases to validate the AWS Network Firewall Rule
+Groups in effect.
 
 1 - `curl -v amazon.com --max-time 4` - *this should work*
 
@@ -45,7 +47,8 @@ sh-4.2$ curl -m 4 amazon.com
 sh-4.2$ curl -m 4 google.com
 curl: (28) Operation timed out after 4001 milliseconds with 0 bytes received
 ```
-3 -  ping any public dns `ping 8.8.8.8 -c 4` - this will create an alert in the Cloudwatch logs group - **"/nfw-demo-dev/anfw/alert"**
+3 -  ping any public dns `ping 8.8.8.8 -c 4` - this will create an alert in
+the CloudWatch Log Group - **"/nfw-demo-dev/anfw/alert"**
 
 ```
 {
