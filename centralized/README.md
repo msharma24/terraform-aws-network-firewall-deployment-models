@@ -2,7 +2,8 @@
 
 
 ## Description
-Centralized AWS Network Firewall Deployment Infrastructure Using available [Terraform Community Open Source Models](https://github.com/terraform-aws-modules/terraform-aws-vpc)
+Centralized AWS Network Firewall Deployment Infrastructure Using available [Terraform Community  Modules](https://github.com/terraform-aws-modules)
+
 
 ![centralized anfw](https://github.com/msharma24/terraform-aws-network-firewall-deployment-models/blob/main/distributed/images/centralized-anfw.png)
 
