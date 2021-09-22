@@ -1,10 +1,12 @@
 # Centralized AWS Network Firewall Deployment Model
 
-## Description
-Centralized AWS Network Firewall Deployment Demo Infrastrcutre Using Terraform Community Open Source Models
 
-[AWS Centralized Network Firewall Architecture Documentation]
-(https://aws.amazon.com/blogs/networking-and-content-delivery/deployment-models-for-aws-network-firewall/)
+## Description
+Centralized AWS Network Firewall Deployment Infrastructure Using available [Terraform Community Open Source Models](https://github.com/terraform-aws-modules/terraform-aws-vpc)
+
+![centralized anfw](https://github.com/msharma24/terraform-aws-network-firewall-deployment-models/blob/main/distributed/images/centralized-anfw.png)
+
+
 
 ## Setup
 This configuration has been tested in "ap-southeast-2" and "us-east-1" region
@@ -63,7 +65,7 @@ Log in to the AWS Console after deploying the Terraform Configuration and go ta 
 
 4 -  try a ping to a public IP address: this shouldn't work `ping 8.8.8.8` and generate an alert in Network Firewall CloudWatch Log Group.
 
-#### Testing Emerging Threat Suricata Open Ruleset
+## Testing Emerging Threat Suricata Open Ruleset
 The user data script of the EC2 instances in installing `nc` so that we can sample test the Emerging Threat Open Ruleset using a simple command line utility created by [testmynids.org](https://github.com/3CORESec/testmynids.org) - *A website and framework for testing NIDS detection.*
 
 
@@ -80,6 +82,9 @@ Once the command execution completes, go back to the AWS Console and access Clou
 #### Notes:
 [Appliance Mode Enabled on the Firewall Inspection VPC](https://aws.amazon.com/blogs/networking-and-content-delivery/centralized-inspection-architecture-with-aws-gateway-load-balancer-and-aws-transit-gateway/)
 
+
+### Don't forget to destroy the resources when u don't need them.
+`terraform destroy [-auto-approve]`
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -138,13 +143,17 @@ Once the command execution completes, go back to the AWS Console and access Clou
 | [aws_networkfirewall_rule_group.block_domains_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_networkfirewall_rule_group.block_public_dns_resolvers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
+| [aws_networkfirewall_rule_group.drop_non_http_between_vpcs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_networkfirewall_rule_group.et_open_rulselt_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_route.egress_vpc_route_to_tgw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.inspection_vpc_firewall_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.inspection_vpc_tgw_rt_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.spoke_vpc_a_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.spoke_vpc_b_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
+| [aws_s3_bucket.anfw_flow_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_public_access_block.anfw_flow_bucket_public_access_block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [random_id.random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [random_string.bucket_random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [aws_ami.amazon_linux_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 
 ## Inputs
