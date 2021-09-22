@@ -11,6 +11,13 @@ module "spoke_vpc_a_ec2_instance" {
   vpc_security_group_ids = [module.spoke_vpc_a_ssh_sg.security_group_id]
   subnet_id              = module.spoke_vpc_a.public_subnets[0]
   iam_instance_profile   = module.spoke_instance_iam_assumable_role.iam_instance_profile_id
+  user_data              = <<EOF
+  #!/bin/bash
+  sleep 60;
+  yum install  -y
+  sleep 5;
+  yum install nc telnet -y
+  EOF
 
   tags = {
     Terraform   = "true"
@@ -35,11 +42,15 @@ module "spoke_vpc_b_ec2_instance" {
     module.spoke_vpc_b_http_sg.security_group_id
   ]
 
-  subnet_id            = module.spoke_vpc_b.public_subnets[0]
+  subnet_id            = module.spoke_vpc_b.public_subnets[1]
   iam_instance_profile = module.spoke_instance_iam_assumable_role.iam_instance_profile_id
   user_data            = <<-EOT
   #!/bin/bash
+  sleep 60;
   echo "[INFO] installing nginx"
+  yum update -y
+  sleep 5;
+  yum install nc telnet -y
   amazon-linux-extras install nginx1.12 -y
   systemctl start nginx
   systemctl enable nginx

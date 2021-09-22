@@ -1,9 +1,12 @@
+#------------------------------------------------------------------------
+# Transit Gateway  Resources
+#------------------------------------------------------------------------
 module "tgw" {
   source  = "terraform-aws-modules/transit-gateway/aws"
   version = "~> 2.0"
 
   name        = "centralized-firewall-transit-gateway"
-  description = "My TGW shared with several other AWS accounts"
+  description = "My TGW description"
 
   enable_auto_accept_shared_attachments  = true
   enable_default_route_table_association = false
@@ -28,13 +31,9 @@ module "tgw" {
       transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.spoke_rt_table.id
     },
     inspection_vpc = {
-      vpc_id                 = aws_vpc.inspection_vpc.id
-      appliance_mode_support = true
-      subnet_ids = [
-        aws_subnet.inspection_vpc_firewall_subnet_a.id,
-        aws_subnet.inspection_vpc_firewall_subnet_b.id,
-        aws_subnet.inspection_vpc_firewall_subnet_c.id,
-      ]
+      vpc_id                                          = module.inspection_vpc.vpc_id
+      appliance_mode_support                          = true
+      subnet_ids                                      = module.inspection_vpc.private_subnets
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = true
       ipv6_support                                    = false
@@ -78,7 +77,6 @@ resource "aws_ec2_transit_gateway_route" "inspection_vpc_route" {
 #------------------------------------------------------------------------
 # Firewall  Transit Gateway  Route Table
 #------------------------------------------------------------------------
-
 resource "aws_ec2_transit_gateway_route_table" "firewall_rt_table" {
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
   tags = {

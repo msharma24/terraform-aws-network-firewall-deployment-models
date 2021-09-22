@@ -18,11 +18,7 @@ resource "aws_networkfirewall_firewall_policy" "nfw_default_policy" {
     }
 
     stateful_rule_group_reference {
-      resource_arn = aws_networkfirewall_rule_group.block_public_dns_resolvers.arn
-    }
-
-    stateful_rule_group_reference {
-      resource_arn = aws_networkfirewall_rule_group.drop_non_http_between_vpcs.arn
+      resource_arn = aws_networkfirewall_rule_group.et_open_rulselt_fw_rule_group.arn
     }
 
   }
@@ -40,14 +36,11 @@ resource "aws_networkfirewall_firewall" "nfw" {
   name = "centralized-network-firewall"
 
   firewall_policy_arn = aws_networkfirewall_firewall_policy.nfw_default_policy.arn
-  vpc_id              = aws_vpc.inspection_vpc.id
+  vpc_id              = module.inspection_vpc.vpc_id
 
   dynamic "subnet_mapping" {
-    for_each = [
-      aws_subnet.inspection_vpc_tgw_subnet_a.id,
-      aws_subnet.inspection_vpc_tgw_subnet_b.id,
-      aws_subnet.inspection_vpc_tgw_subnet_c.id,
-    ]
+
+    for_each = module.inspection_vpc.public_subnets
 
     content {
       subnet_id = subnet_mapping.value
@@ -128,32 +121,19 @@ resource "aws_networkfirewall_rule_group" "block_domains_fw_rule_group" {
 }
 
 #--------------------------------------------------------------------------
-#  Drop Non HTTP Traffic Rule Group
+#  Emerging Threat Rule Group
 #--------------------------------------------------------------------------
-resource "aws_networkfirewall_rule_group" "drop_non_http_between_vpcs" {
-  capacity = 100
-  name     = "drop-non-http-between-vpcs"
-  type     = "STATEFUL"
-  rule_group {
-    rule_variables {
-      ip_sets {
-        key = "SPOKE_VPCS"
-        ip_set {
-          definition = [
-            module.spoke_vpc_a.vpc_cidr_block,
-            module.spoke_vpc_b.vpc_cidr_block,
+resource "aws_networkfirewall_rule_group" "et_open_rulselt_fw_rule_group" {
+  name        = "et-open-rulselt-fw-rule-group"
+  description = "Stateful Inspection from rules specifications defined in Suricata flat format"
+  capacity    = 250
+  type        = "STATEFUL"
+  rules       = file("./rules/emerging-user-agents.rules")
 
-          ]
-        }
-      }
-    }
-    rules_source {
-      rules_string = <<EOF
-      drop tcp $SPOKE_VPCS any <> $SPOKE_VPCS any (msg:"Blocked TCP that is not HTTP"; flow:established; app-layer-protocol:!http; sid:100; rev:1;)
-      drop ip $SPOKE_VPCS any <> $SPOKE_VPCS any (msg: "Block non-TCP traffic."; ip_proto:!TCP;sid:200; rev:1;)
-      EOF
-    }
+  tags = {
+    Name = "et-open-rulselt-fw-rule-group"
   }
+
 }
 
 #--------------------------------------------------------------------------
@@ -184,44 +164,17 @@ resource "aws_networkfirewall_rule_group" "block_public_dns_resolvers" {
 }
 
 
-
 #--------------------------------------------------------------------------
 #  Network Firewall Logging configuration
 #--------------------------------------------------------------------------
 resource "aws_cloudwatch_log_group" "anfw_alert_log_group" {
-  name = "/aws/network-firewall/alert"
+  name              = "/aws/network-firewall/alert"
+  retention_in_days = 60
 }
 
-resource "random_string" "bucket_random_id" {
-  length  = 5
-  special = false
-  upper   = false
-}
-
-resource "aws_s3_bucket" "anfw_flow_bucket" {
-  bucket        = "network-firewall-flow-bucket-${random_string.bucket_random_id.id}"
-  acl           = "private"
-  force_destroy = true
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = "aws/s3"
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
-  versioning {
-    enabled = true
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "anfw_flow_bucket_public_access_block" {
-  bucket = aws_s3_bucket.anfw_flow_bucket.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+resource "aws_cloudwatch_log_group" "anfw_flow_log_group" {
+  name              = "/aws/network-firewall/flow"
+  retention_in_days = 60
 }
 
 resource "aws_networkfirewall_logging_configuration" "anfw_alert_logging_configuration" {
@@ -236,11 +189,10 @@ resource "aws_networkfirewall_logging_configuration" "anfw_alert_logging_configu
     }
     log_destination_config {
       log_destination = {
-        bucketName = aws_s3_bucket.anfw_flow_bucket.bucket
+        logGroup = aws_cloudwatch_log_group.anfw_flow_log_group.name
       }
-      log_destination_type = "S3"
+      log_destination_type = "CloudWatchLogs"
       log_type             = "FLOW"
     }
   }
 }
-
