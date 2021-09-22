@@ -13,9 +13,10 @@ module "spoke_vpc_a_ec2_instance" {
   iam_instance_profile   = module.spoke_instance_iam_assumable_role.iam_instance_profile_id
   user_data              = <<EOF
   #!/bin/bash
+  sleep 60;
   yum install  -y
   sleep 5;
-  yum install nc -y
+  yum install nc telnet -y
   EOF
 
   tags = {
@@ -45,10 +46,11 @@ module "spoke_vpc_b_ec2_instance" {
   iam_instance_profile = module.spoke_instance_iam_assumable_role.iam_instance_profile_id
   user_data            = <<-EOT
   #!/bin/bash
+  sleep 60;
   echo "[INFO] installing nginx"
   yum update -y
   sleep 5;
-  yum install nc -y
+  yum install nc telnet -y
   amazon-linux-extras install nginx1.12 -y
   systemctl start nginx
   systemctl enable nginx

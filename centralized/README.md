@@ -16,22 +16,55 @@ terraform apply  [-auto-approve]
 ```
 
 ### Testing Firewall Rules
-Log in to the AWS Console after deploying the Terraform Configuration and go ta **AWS Systems Manager >> Session Manager** and start a Session with one of the EC2 instacnes  :-
 
-1 - try to SSH to the EC2 Instance in `spoke-vpc-b` from the EC2 Instance in `spoke-vpc-a` (or vice-versa) ==>  this shouldn't work
+Log in to the AWS Console after deploying the Terraform Configuration and go ta **AWS Systems Manager >> Session Manager** and start a Session with one of the EC2 Instances named `dev/spoke_vpc_a_instance`  :-
 
-2 - try to curl the private IP of the EC2 Instance in `spoke-vpc-b` from the EC2 Instance in `spoke-vpc-a`: ==> this should work and display nginx homepage
+1 - try to SSH to the Private IP of the EC2 Instance in `spoke-vpc-b` from the EC2 Instance in `spoke-vpc-a` (or vice-versa) ==>  this shouldn't work . However `telnet EC2_Private_Ip:22` will work
+
+2 - try to curl the private IP of the EC2 Instance in `spoke-vpc-b` from the EC2 Instance in `spoke-vpc-a`: ==> this should work and display nginx homepage ``` curl http://<Spoke_VPC_B>:80/```
 
 3 - try to `curl https://facebook.com` or` https://yahoo.com `from either `spoke-vpc-a` or `spoke-vpc-b` ==> this shouldn't work
 
-4 -  try a ping to a public IP address: this shouldn't work `ping 8.8.8.8`
+```
+{
+    "firewall_name": "centralized-network-firewall",
+    "availability_zone": "us-east-1c",
+    "event_timestamp": "1632271315",
+    "event": {
+        "timestamp": "2021-09-22T00:41:55.348195+0000",
+        "flow_id": 1549540378476749,
+        "event_type": "alert",
+        "src_ip": "10.0.101.147",
+        "src_port": 58752,
+        "dest_ip": "74.6.143.26",
+        "dest_port": 80,
+        "proto": "TCP",
+        "tx_id": 0,
+        "alert": {
+            "action": "blocked",
+            "signature_id": 3,
+            "rev": 1,
+            "signature": "matching HTTP denylisted FQDNs",
+            "category": "",
+            "severity": 1
+        },
+        "http": {
+            "hostname": "www.yahoo.com",
+            "url": "/",
+            "http_user_agent": "curl/7.76.1",
+            "http_method": "GET",
+            "protocol": "HTTP/1.1",
+            "length": 0
+        },
+        "app_proto": "http"
+    }
+}
+```
 
-5 - try to `dig` using a public DNS resolver: this shouldn't work `dig google.com`
-
-6 - try to curl any other public URL: this should work 
+4 -  try a ping to a public IP address: this shouldn't work `ping 8.8.8.8` and generate an alert in Network Firewall CloudWatch Log Group.
 
 #### Testing Emerging Threat Suricata Open Ruleset
-The user data script of the EC2 instances in installing `nc` so that we can sample test the Emerging Threat Open Ruleset using a simple command line utility created by [testmynids.org](https://github.com/3CORESec/testmynids.org) - A website and framework for testing NIDS detection.
+The user data script of the EC2 instances in installing `nc` so that we can sample test the Emerging Threat Open Ruleset using a simple command line utility created by [testmynids.org](https://github.com/3CORESec/testmynids.org) - *A website and framework for testing NIDS detection.*
 
 
 Login to one of the EC2 instances via SSM Session Manager and run the following `curl` command to execute sample 
@@ -105,17 +138,13 @@ Once the command execution completes, go back to the AWS Console and access Clou
 | [aws_networkfirewall_rule_group.block_domains_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_networkfirewall_rule_group.block_public_dns_resolvers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
-| [aws_networkfirewall_rule_group.drop_non_http_between_vpcs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_networkfirewall_rule_group.et_open_rulselt_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [aws_route.egress_vpc_route_to_tgw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.inspection_vpc_firewall_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.inspection_vpc_tgw_rt_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.spoke_vpc_a_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.spoke_vpc_b_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
-| [aws_s3_bucket.anfw_flow_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket_public_access_block.anfw_flow_bucket_public_access_block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [random_id.random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [random_string.bucket_random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [aws_ami.amazon_linux_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 
 ## Inputs
