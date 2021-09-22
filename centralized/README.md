@@ -5,7 +5,7 @@
 Centralized AWS Network Firewall Deployment Infrastructure Using available [Terraform Community  Modules](https://github.com/terraform-aws-modules)
 
 
-![centralized anfw](https://github.com/msharma24/terraform-aws-network-firewall-deployment-models/blob/main/distributed/images/centralized-anfw.png)
+![centralized-anfw](https://github.com/msharma24/terraform-aws-network-firewall-deployment-models/blob/main/centralized/images/centralized-anfw.png)
 
 
 
