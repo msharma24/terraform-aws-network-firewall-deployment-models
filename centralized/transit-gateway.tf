@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------
 module "tgw" {
   source  = "terraform-aws-modules/transit-gateway/aws"
-  version = "~> 2.0"
+  version = "2.4.0"
 
   name        = "centralized-firewall-transit-gateway"
   description = "My TGW description"
