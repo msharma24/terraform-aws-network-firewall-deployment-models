@@ -93,7 +93,7 @@ Once the command execution completes, go back to the AWS Console and access Clou
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >=3.58.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | =4.30.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >=2.3.0 |
 | <a name="requirement_template"></a> [template](#requirement\_template) | >=2.2.0 |
 
@@ -101,8 +101,8 @@ Once the command execution completes, go back to the AWS Console and access Clou
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.58.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.30.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
 
 ## Modules
 
@@ -122,47 +122,43 @@ Once the command execution completes, go back to the AWS Console and access Clou
 | <a name="module_spoke_vpc_b_https_sg"></a> [spoke\_vpc\_b\_https\_sg](#module\_spoke\_vpc\_b\_https\_sg) | terraform-aws-modules/security-group/aws//modules/https-443 | n/a |
 | <a name="module_spoke_vpc_b_ssh_sg"></a> [spoke\_vpc\_b\_ssh\_sg](#module\_spoke\_vpc\_b\_ssh\_sg) | terraform-aws-modules/security-group/aws//modules/ssh | n/a |
 | <a name="module_spoke_vpc_b_ssm_endpoint"></a> [spoke\_vpc\_b\_ssm\_endpoint](#module\_spoke\_vpc\_b\_ssm\_endpoint) | terraform-aws-modules/vpc/aws//modules/vpc-endpoints | n/a |
-| <a name="module_tgw"></a> [tgw](#module\_tgw) | terraform-aws-modules/transit-gateway/aws | ~> 2.0 |
+| <a name="module_tgw"></a> [tgw](#module\_tgw) | terraform-aws-modules/transit-gateway/aws | 2.8.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [aws_cloudwatch_log_group.anfw_alert_log_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
-| [aws_cloudwatch_log_group.anfw_flow_log_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
-| [aws_ec2_transit_gateway_route.egress_vpc_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route) | resource |
-| [aws_ec2_transit_gateway_route.inspection_vpc_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route) | resource |
-| [aws_ec2_transit_gateway_route.inspection_vpc_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route) | resource |
-| [aws_ec2_transit_gateway_route.spoke_vpc_a_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route) | resource |
-| [aws_ec2_transit_gateway_route.spoke_vpc_b_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route) | resource |
-| [aws_ec2_transit_gateway_route_table.egress_rt_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route_table) | resource |
-| [aws_ec2_transit_gateway_route_table.firewall_rt_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route_table) | resource |
-| [aws_ec2_transit_gateway_route_table.spoke_rt_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route_table) | resource |
-| [aws_networkfirewall_firewall.nfw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_firewall) | resource |
-| [aws_networkfirewall_firewall_policy.nfw_default_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_firewall_policy) | resource |
-| [aws_networkfirewall_logging_configuration.anfw_alert_logging_configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_logging_configuration) | resource |
-| [aws_networkfirewall_rule_group.block_domains_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
-| [aws_networkfirewall_rule_group.block_public_dns_resolvers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
-| [aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
-| [aws_networkfirewall_rule_group.drop_non_http_between_vpcs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
-| [aws_networkfirewall_rule_group.et_open_rulselt_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
-| [aws_route.egress_vpc_route_to_tgw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
-| [aws_route.inspection_vpc_firewall_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
-| [aws_route.inspection_vpc_tgw_rt_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
-| [aws_route.spoke_vpc_a_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
-| [aws_route.spoke_vpc_b_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
-| [aws_s3_bucket.anfw_flow_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket_public_access_block.anfw_flow_bucket_public_access_block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_cloudwatch_log_group.anfw_alert_log_group](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_log_group.anfw_flow_log_group](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/cloudwatch_log_group) | resource |
+| [aws_ec2_transit_gateway_route.egress_vpc_attachment](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route) | resource |
+| [aws_ec2_transit_gateway_route.inspection_vpc_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route) | resource |
+| [aws_ec2_transit_gateway_route.inspection_vpc_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route) | resource |
+| [aws_ec2_transit_gateway_route.spoke_vpc_a_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route) | resource |
+| [aws_ec2_transit_gateway_route.spoke_vpc_b_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route) | resource |
+| [aws_ec2_transit_gateway_route_table.egress_rt_table](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route_table) | resource |
+| [aws_ec2_transit_gateway_route_table.firewall_rt_table](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route_table) | resource |
+| [aws_ec2_transit_gateway_route_table.spoke_rt_table](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/ec2_transit_gateway_route_table) | resource |
+| [aws_networkfirewall_firewall.nfw](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/networkfirewall_firewall) | resource |
+| [aws_networkfirewall_firewall_policy.nfw_default_policy](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/networkfirewall_firewall_policy) | resource |
+| [aws_networkfirewall_logging_configuration.anfw_alert_logging_configuration](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/networkfirewall_logging_configuration) | resource |
+| [aws_networkfirewall_rule_group.block_domains_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/networkfirewall_rule_group) | resource |
+| [aws_networkfirewall_rule_group.block_public_dns_resolvers](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/networkfirewall_rule_group) | resource |
+| [aws_networkfirewall_rule_group.drop_icmp_traffic_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/networkfirewall_rule_group) | resource |
+| [aws_networkfirewall_rule_group.et_open_rulselt_fw_rule_group](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/networkfirewall_rule_group) | resource |
+| [aws_route.egress_vpc_route_to_tgw](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/route) | resource |
+| [aws_route.inspection_vpc_firewall_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/route) | resource |
+| [aws_route.inspection_vpc_tgw_rt_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/route) | resource |
+| [aws_route.spoke_vpc_a_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/route) | resource |
+| [aws_route.spoke_vpc_b_tgw_route](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/resources/route) | resource |
 | [random_id.random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [random_string.bucket_random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
-| [aws_ami.amazon_linux_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
+| [aws_ami.amazon_linux_2](https://registry.terraform.io/providers/hashicorp/aws/4.30.0/docs/data-sources/ami) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment name | `string` | `"dev"` | no |
-| <a name="input_region"></a> [region](#input\_region) | AWS Deployment region | `string` | `"ap-southeast-2"` | no |
+| <a name="input_region"></a> [region](#input\_region) | AWS Deployment region | `string` | `"us-east-1"` | no |
 
 ## Outputs
 

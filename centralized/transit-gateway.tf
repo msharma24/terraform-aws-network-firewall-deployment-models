@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------
 module "tgw" {
   source  = "terraform-aws-modules/transit-gateway/aws"
-  version = "2.4.0"
+  version = "2.8.0"
 
   name        = "centralized-firewall-transit-gateway"
   description = "My TGW description"
@@ -52,7 +52,6 @@ module "tgw" {
   ram_allow_external_principals = true
 
   tags = {
-    Purpose = "tgw-complete-example"
   }
 }
 

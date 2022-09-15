@@ -80,6 +80,12 @@ module "spoke_vpc_a_ssm_endpoint" {
       service             = "ec2messages",
       private_dns_enabled = true,
       subnet_ids          = module.spoke_vpc_a.public_subnets
+    },
+    execute-api = {
+      service             = "execute-api",
+      private_dns_enabled = true,
+      subnet_ids          = module.spoke_vpc_a.public_subnets
     }
+
   }
 }

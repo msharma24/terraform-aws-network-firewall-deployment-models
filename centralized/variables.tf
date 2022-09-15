@@ -7,5 +7,5 @@ variable "environment" {
 variable "region" {
   description = "AWS Deployment region"
   type        = string
-  default     = "ap-southeast-2"
+  default     = "us-east-1"
 }
