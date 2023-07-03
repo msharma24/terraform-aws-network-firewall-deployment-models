@@ -5,7 +5,7 @@
 module "spoke_vpc_a" {
 
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.0.0"
+  version = "5.0.0"
 
 
   name = "spoke_vpc_a"

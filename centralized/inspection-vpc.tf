@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------
 module "inspection_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.0.0"
+  version = "5.0.0"
   name    = "inspection_vpc"
 
   cidr            = "100.64.0.0/16"
