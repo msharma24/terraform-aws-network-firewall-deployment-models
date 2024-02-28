@@ -38,16 +38,16 @@ resource "aws_subnet" "firewall_subnet_1" {
 
 }
 
-resource "aws_subnet" "firewall_subnet_2" {
-  cidr_block        = "10.1.16.16/28"
-  vpc_id            = aws_vpc.vpc.id
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "firewall-subnet-2-nfw-demo-dev"
-  }
-
-}
+# resource "aws_subnet" "firewall_subnet_2" {
+#   cidr_block        = "10.1.16.16/28"
+#   vpc_id            = aws_vpc.vpc.id
+#   availability_zone = data.aws_availability_zones.available.names[1]
+#
+#   tags = {
+#     Name = "firewall-subnet-2-nfw-demo-dev"
+#   }
+#
+# }
 
 #-----------------------------------------------------------------------------
 # Firewall Route Table
@@ -62,15 +62,15 @@ resource "aws_route_table" "firewall_route_table_1" {
 
 }
 
-resource "aws_route_table" "firewall_route_table_2" {
-
-  vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "firewall-route-table-1-nfw-demo-dev"
-  }
-
-}
+# resource "aws_route_table" "firewall_route_table_2" {
+#
+#   vpc_id = aws_vpc.vpc.id
+#
+#   tags = {
+#     Name = "firewall-route-table-1-nfw-demo-dev"
+#   }
+#
+# }
 
 
 #-----------------------------------------------------------------------------
@@ -82,11 +82,11 @@ resource "aws_route_table_association" "firewall_subnet_rt_association_1" {
 
 }
 
-resource "aws_route_table_association" "firewall_subnet_rt_association_2" {
-  subnet_id      = aws_subnet.firewall_subnet_2.id
-  route_table_id = aws_route_table.firewall_route_table_2.id
-
-}
+# resource "aws_route_table_association" "firewall_subnet_rt_association_2" {
+#   subnet_id      = aws_subnet.firewall_subnet_2.id
+#   route_table_id = aws_route_table.firewall_route_table_2.id
+#
+# }
 
 #-----------------------------------------------------------------------------
 # Internet Route Config
@@ -97,12 +97,12 @@ resource "aws_route" "firewall_subnet_1_route" {
   gateway_id             = aws_internet_gateway.igw.id
 }
 
-resource "aws_route" "firewall_subnet_2_route" {
-  destination_cidr_block = "0.0.0.0/0"
-  route_table_id         = aws_route_table.firewall_route_table_2.id
-  gateway_id             = aws_internet_gateway.igw.id
-
-}
+# resource "aws_route" "firewall_subnet_2_route" {
+#   destination_cidr_block = "0.0.0.0/0"
+#   route_table_id         = aws_route_table.firewall_route_table_2.id
+#   gateway_id             = aws_internet_gateway.igw.id
+#
+# }
 
 /*
  * Public Route Config
@@ -122,16 +122,16 @@ resource "aws_subnet" "public_subnet_1" {
 
 }
 
-resource "aws_subnet" "public_subnet_2" {
-  cidr_block        = "10.1.3.0/24"
-  vpc_id            = aws_vpc.vpc.id
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "public-subnet-1-nfw-demo-dev"
-  }
-
-}
+# resource "aws_subnet" "public_subnet_2" {
+#   cidr_block        = "10.1.3.0/24"
+#   vpc_id            = aws_vpc.vpc.id
+#   availability_zone = data.aws_availability_zones.available.names[1]
+#
+#   tags = {
+#     Name = "public-subnet-1-nfw-demo-dev"
+#   }
+#
+# }
 
 #-----------------------------------------------------------------------------
 # public Route Table
@@ -146,15 +146,15 @@ resource "aws_route_table" "public_route_table_1" {
 
 }
 
-resource "aws_route_table" "public_route_table_2" {
-
-  vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "public-route-table-1-nfw-demo-dev"
-  }
-
-}
+# resource "aws_route_table" "public_route_table_2" {
+#
+#   vpc_id = aws_vpc.vpc.id
+#
+#   tags = {
+#     Name = "public-route-table-1-nfw-demo-dev"
+#   }
+#
+# }
 
 #-----------------------------------------------------------------------------
 # Subnet association
@@ -165,11 +165,11 @@ resource "aws_route_table_association" "public_subnet_rt_association_1" {
 
 }
 
-resource "aws_route_table_association" "public_subnet_rt_association_2" {
-  subnet_id      = aws_subnet.public_subnet_2.id
-  route_table_id = aws_route_table.public_route_table_2.id
-
-}
+# resource "aws_route_table_association" "public_subnet_rt_association_2" {
+#   subnet_id      = aws_subnet.public_subnet_2.id
+#   route_table_id = aws_route_table.public_route_table_2.id
+#
+# }
 
 #-----------------------------------------------------------------------------
 # Firewall  Route Config
@@ -180,13 +180,13 @@ resource "aws_route" "public_subnet_1_route" {
   vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[0]
 }
 
-resource "aws_route" "public_subnet_2_route" {
-  destination_cidr_block = "0.0.0.0/0"
-  route_table_id         = aws_route_table.public_route_table_2.id
-  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
-
-
-}
+# resource "aws_route" "public_subnet_2_route" {
+#   destination_cidr_block = "0.0.0.0/0"
+#   route_table_id         = aws_route_table.public_route_table_2.id
+#   vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
+#
+#
+# }
 
 
 /*
@@ -207,16 +207,16 @@ resource "aws_subnet" "private_subnet_1" {
 
 }
 
-resource "aws_subnet" "private_subnet_2" {
-  cidr_block        = "10.1.2.0/24"
-  vpc_id            = aws_vpc.vpc.id
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "private-subnet-2-nfw-demo-dev"
-  }
-
-}
+# resource "aws_subnet" "private_subnet_2" {
+#   cidr_block        = "10.1.2.0/24"
+#   vpc_id            = aws_vpc.vpc.id
+#   availability_zone = data.aws_availability_zones.available.names[1]
+#
+#   tags = {
+#     Name = "private-subnet-2-nfw-demo-dev"
+#   }
+#
+# }
 
 #-----------------------------------------------------------------------------
 # private Route Table
@@ -231,15 +231,15 @@ resource "aws_route_table" "private_route_table_1" {
 
 }
 
-resource "aws_route_table" "private_route_table_2" {
-
-  vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "private-route-table-2-nfw-demo-dev"
-  }
-
-}
+# resource "aws_route_table" "private_route_table_2" {
+#
+#   vpc_id = aws_vpc.vpc.id
+#
+#   tags = {
+#     Name = "private-route-table-2-nfw-demo-dev"
+#   }
+#
+# }
 
 
 #-----------------------------------------------------------------------------
@@ -251,11 +251,11 @@ resource "aws_route_table_association" "private_subnet_rt_association_1" {
 
 }
 
-resource "aws_route_table_association" "private_subnet_rt_association_2" {
-  subnet_id      = aws_subnet.private_subnet_2.id
-  route_table_id = aws_route_table.private_route_table_2.id
-
-}
+# resource "aws_route_table_association" "private_subnet_rt_association_2" {
+#   subnet_id      = aws_subnet.private_subnet_2.id
+#   route_table_id = aws_route_table.private_route_table_2.id
+#
+# }
 
 #-----------------------------------------------------------------------------
 # NAT  Route Config
@@ -270,16 +270,16 @@ resource "aws_route" "private_subnet_1_route" {
   ]
 }
 
-resource "aws_route" "private_subnet_2_route" {
-  destination_cidr_block = "0.0.0.0/0"
-  route_table_id         = aws_route_table.private_route_table_2.id
-  nat_gateway_id         = aws_nat_gateway.nat_gateway_2.id
-
-  depends_on = [
-    aws_nat_gateway.nat_gateway_2
-  ]
-
-}
+# resource "aws_route" "private_subnet_2_route" {
+#   destination_cidr_block = "0.0.0.0/0"
+#   route_table_id         = aws_route_table.private_route_table_2.id
+#   nat_gateway_id         = aws_nat_gateway.nat_gateway_2.id
+#
+#   depends_on = [
+#     aws_nat_gateway.nat_gateway_2
+#   ]
+#
+# }
 
 #----------------------------------------------------------------------------
 # Ingress Route Table for return traffic
@@ -306,12 +306,12 @@ resource "aws_route" "ingress_route_1" {
 
 }
 
-resource "aws_route" "ingress_route_2" {
-  route_table_id         = aws_route_table.ingress_route_table.id
-  destination_cidr_block = "10.1.3.0/24"
-  vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
-
-}
+# resource "aws_route" "ingress_route_2" {
+#   route_table_id         = aws_route_table.ingress_route_table.id
+#   destination_cidr_block = "10.1.3.0/24"
+#   vpc_endpoint_id        = (aws_networkfirewall_firewall.anfw.firewall_status[0].sync_states[*].attachment[0].endpoint_id)[1]
+#
+# }
 
 #-----------------------------------------------------------------------------
 # NAT  Gateway
@@ -323,12 +323,12 @@ resource "aws_eip" "nat_gateway_eip_1" {
   }
 }
 
-resource "aws_eip" "nat_gateway_eip_2" {
-
-  tags = {
-    Name = "nat_gateway_eip_2"
-  }
-}
+# resource "aws_eip" "nat_gateway_eip_2" {
+#
+#   tags = {
+#     Name = "nat_gateway_eip_2"
+#   }
+# }
 
 resource "aws_nat_gateway" "nat_gateway_1" {
   subnet_id     = aws_subnet.public_subnet_1.id
@@ -339,14 +339,14 @@ resource "aws_nat_gateway" "nat_gateway_1" {
   }
 }
 
-resource "aws_nat_gateway" "nat_gateway_2" {
-  subnet_id     = aws_subnet.public_subnet_2.id
-  allocation_id = aws_eip.nat_gateway_eip_2.id
-
-  tags = {
-    Name = "nat_gateway_2"
-  }
-}
+# resource "aws_nat_gateway" "nat_gateway_2" {
+#   subnet_id     = aws_subnet.public_subnet_2.id
+#   allocation_id = aws_eip.nat_gateway_eip_2.id
+#
+#   tags = {
+#     Name = "nat_gateway_2"
+#   }
+# }
 
 #-----------------------------------------------------------------------------
 #  AWS PrivateLink interface endpoint for services:
@@ -399,7 +399,7 @@ resource "aws_vpc_endpoint" "ssmmessages_endpoint" {
 
   subnet_ids = [
     aws_subnet.public_subnet_1.id,
-    aws_subnet.public_subnet_2.id
+    #aws_subnet.public_subnet_2.id
   ]
 
   vpc_endpoint_type   = "Interface"
@@ -417,7 +417,8 @@ resource "aws_vpc_endpoint" "ssm_endpoint" {
 
   subnet_ids = [
     aws_subnet.public_subnet_1.id,
-  aws_subnet.public_subnet_2.id]
+    #  aws_subnet.public_subnet_2.id
+  ]
 
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
@@ -434,7 +435,7 @@ resource "aws_vpc_endpoint" "ec2messages_endpoint" {
 
   subnet_ids = [
     aws_subnet.public_subnet_1.id,
-    aws_subnet.public_subnet_2.id
+    #aws_subnet.public_subnet_2.id
   ]
 
   vpc_endpoint_type   = "Interface"
@@ -476,8 +477,8 @@ resource "aws_vpc_endpoint_route_table_association" "private_subnet_endpoint_rt_
 }
 
 
-resource "aws_vpc_endpoint_route_table_association" "private_subnet_endpoint_rt_association_2" {
-  vpc_endpoint_id = aws_vpc_endpoint.s3_gateway_endpoint.id
-  route_table_id  = aws_route_table.private_route_table_2.id
-
-}
+# resource "aws_vpc_endpoint_route_table_association" "private_subnet_endpoint_rt_association_2" {
+#   vpc_endpoint_id = aws_vpc_endpoint.s3_gateway_endpoint.id
+#   route_table_id  = aws_route_table.private_route_table_2.id
+#
+# }

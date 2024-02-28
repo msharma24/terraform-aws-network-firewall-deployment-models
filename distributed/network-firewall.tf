@@ -45,7 +45,10 @@ resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
         target_types         = ["HTTP_HOST", "TLS_SNI"]
         targets = [
           ".amazon.com",
-          ".amazonaws.com"
+          ".amazonaws.com",
+          ".google.com",
+          ".facebook.com",
+          ".fbcdn.net",
         ]
       }
     }
@@ -95,7 +98,7 @@ resource "aws_networkfirewall_firewall" "anfw" {
   dynamic "subnet_mapping" {
     for_each = [
       aws_subnet.firewall_subnet_1.id,
-      aws_subnet.firewall_subnet_2.id
+      #      aws_subnet.firewall_subnet_2.id
     ]
 
     content {
