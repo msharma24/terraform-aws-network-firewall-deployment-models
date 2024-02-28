@@ -14,7 +14,19 @@ resource "aws_security_group" "subnet_security_group" {
       self             = false
       security_groups  = []
       prefix_list_ids  = []
-    }
+    },
+    {
+      description      = "Test Instance SG RDP"
+      from_port        = 3389
+      to_port          = 3389
+      protocol         = "tcp"
+      ipv6_cidr_blocks = ["::/0"]
+      cidr_blocks      = ["0.0.0.0/0"]
+      self             = false
+      security_groups  = []
+      prefix_list_ids  = []
+    },
+
   ]
 
   egress = [
@@ -52,9 +64,10 @@ resource "aws_instance" "test_instance_1" {
 }
 
 resource "aws_instance" "test_instance_2" {
-  ami                         = data.aws_ami.amazon_linux_2.id
-  instance_type               = "t2.micro"
+  ami                         = data.aws_ami.windows_2022.id
+  instance_type               = "t2.large"
   subnet_id                   = aws_subnet.public_subnet_1.id
+  key_name                    = "test-firewa--pem"
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.subnet_instance_iam_profile.id
   vpc_security_group_ids      = [aws_security_group.subnet_security_group.id]

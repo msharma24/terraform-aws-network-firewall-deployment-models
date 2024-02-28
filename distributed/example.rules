@@ -1,0 +1,1 @@
+drop tcp any any -> any ![80] (msg:"Drop all TCP traffic except to ports 80"; flow:established; classtype:attempted-recon; sid:1000001; rev:1;)

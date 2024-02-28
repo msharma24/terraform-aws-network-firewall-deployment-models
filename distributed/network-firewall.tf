@@ -16,6 +16,10 @@ resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
       resource_arn = aws_networkfirewall_rule_group.domain_allow_fw_rule_group.arn
     }
 
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.example.arn
+    }
+
   }
 
   lifecycle {
@@ -42,13 +46,10 @@ resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
     rules_source {
       rules_source_list {
         generated_rules_type = "ALLOWLIST"
-        target_types         = ["HTTP_HOST", "TLS_SNI"]
+        #  generated_rules_type = "DENYLIST"
+        target_types = ["HTTP_HOST", "TLS_SNI"]
         targets = [
-          ".amazon.com",
           ".amazonaws.com",
-          ".google.com",
-          ".facebook.com",
-          ".fbcdn.net",
         ]
       }
     }
@@ -145,4 +146,17 @@ resource "aws_networkfirewall_logging_configuration" "anfw_alert_log_config" {
     }
   }
 
+}
+
+
+resource "aws_networkfirewall_rule_group" "example" {
+  capacity = 100
+  name     = "example"
+  type     = "STATEFUL"
+  rules    = file("example.rules")
+
+  tags = {
+    Tag1 = "Value1"
+    Tag2 = "Value2"
+  }
 }
