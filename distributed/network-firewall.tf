@@ -1,6 +1,19 @@
 #---------------------------------------------------------
 # Network Firewall Resources
 #---------------------------------------------------------
+resource "aws_networkfirewall_firewall_policy" "defaut_firewall_policy" {
+  name = "default-firewall-policy"
+
+  firewall_policy {
+    stateless_default_actions          = ["aws:forward_to_sfe"]
+    stateless_fragment_default_actions = ["aws:forward_to_sfe"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+}
 resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
   name = "firewall-policy"
 
@@ -45,7 +58,8 @@ resource "aws_networkfirewall_rule_group" "domain_allow_fw_rule_group" {
         generated_rules_type = "DENYLIST"
         target_types         = ["HTTP_HOST", "TLS_SNI"]
         targets = [
-          "yahoo.com"
+          ".yahoo.com",
+          ".bbc.co.uk",
         ]
       }
     }
