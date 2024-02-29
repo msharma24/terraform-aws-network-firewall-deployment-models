@@ -1,1 +1,4 @@
-drop tcp any any -> any ![80] (msg:"Drop all TCP traffic except to ports 80"; flow:established; classtype:attempted-recon; sid:1000001; rev:1;)
+drop tcp any any -> any 445 (msg:"Block TCP traffic on port 445"; sid:1000001;)
+drop tcp any any -> any 25 (msg:"Block TCP traffic on port 25"; sid:1000002;)
+drop tcp any any -> any 23 (msg:"Block TCP traffic on port 23"; sid:1000003;)
+drop tcp any any -> any 21 (msg:"Block TCP traffic on port 21"; sid:1000004;)

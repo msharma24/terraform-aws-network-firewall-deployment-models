@@ -67,7 +67,7 @@ resource "aws_instance" "test_instance_2" {
   ami                         = data.aws_ami.windows_2022.id
   instance_type               = "t2.large"
   subnet_id                   = aws_subnet.public_subnet_1.id
-  key_name                    = "test-firewa--pem"
+  key_name                    = "network-firewall-key"
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.subnet_instance_iam_profile.id
   vpc_security_group_ids      = [aws_security_group.subnet_security_group.id]
@@ -76,3 +76,4 @@ resource "aws_instance" "test_instance_2" {
     Name = "public-test-instance-2"
   }
 }
+
