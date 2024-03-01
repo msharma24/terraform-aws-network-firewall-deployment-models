@@ -29,6 +29,10 @@ resource "aws_networkfirewall_firewall_policy" "firewall_policy" {
       resource_arn = aws_networkfirewall_rule_group.block_ports.arn
     }
 
+    stateful_rule_group_reference {
+      resource_arn = aws_networkfirewall_rule_group.icmp_alert_fw_rule_group.arn
+    }
+
   }
 
   lifecycle {
@@ -78,6 +82,21 @@ resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
   rule_group {
     rules_source {
       stateful_rule {
+        action = "DROP"
+        header {
+          destination      = var.destination_ip_address
+          destination_port = "21"
+          protocol         = "TCP"
+          direction        = "ANY"
+          source           = "ANY"
+          source_port      = "ANY"
+        }
+        rule_option {
+          keyword = "sid:1"
+        }
+      }
+
+      stateful_rule {
         action = "ALERT"
         header {
           destination      = "ANY"
@@ -86,15 +105,30 @@ resource "aws_networkfirewall_rule_group" "icmp_alert_fw_rule_group" {
           direction        = "ANY"
           source           = "ANY"
           source_port      = "ANY"
-
         }
         rule_option {
-          keyword = "sid:1"
+          keyword = "sid:2"
+        }
+      }
+
+      stateful_rule {
+        action = "REJECT"
+        header {
+          destination      = "ANY"
+          destination_port = "22"
+          protocol         = "TCP"
+          direction        = "ANY"
+          source           = "ANY"
+          source_port      = "ANY"
+        }
+        rule_option {
+          keyword = "sid:3"
         }
       }
     }
   }
 }
+
 
 #---------------------------------------------------------
 # Logging Configuration
